@@ -327,6 +327,28 @@ function Index() {
 
               <div className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
                 <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-semibold tracking-tight">
+                    Portfolio follow-ons{" "}
+                    <span className="text-muted-foreground font-normal">
+                      (existing companies raising)
+                    </span>
+                  </h2>
+                  <a
+                    href="#"
+                    className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                  >
+                    view full pipeline <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {followOnStages.map((s) => (
+                    <StageCard key={s.name} name={s.name} count={s.count} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
+                <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-lg font-semibold tracking-tight">Decarbon8</h2>
                   <a
                     href="#"
