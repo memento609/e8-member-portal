@@ -235,7 +235,7 @@ function Index() {
           `}</style>
 
           <div className="mx-auto max-w-[1400px] px-4 py-6 md:px-8">
-            <header className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+            <header className="mb-6 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
               <div className="min-w-0">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">
                   Home
@@ -243,10 +243,44 @@ function Index() {
                 <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight sm:text-3xl">
                   Good afternoon, Nami.
                 </h1>
+                <div className="mt-1 hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Reworked wireframe
+                </div>
               </div>
-              <div className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
-                <Sparkles className="h-3.5 w-3.5" />
-                Reworked wireframe
+
+              {/* Member Profile — top-right corner */}
+              <div className="w-full rounded-2xl border border-border bg-card p-4 shadow-sm md:w-[360px]">
+                <div className="flex items-center gap-3">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-muted text-sm font-semibold">
+                    NT
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-sm font-semibold">Nami Turner</div>
+                    <div className="truncate text-[11px] text-muted-foreground">
+                      nami@nagog.com · Member since Jun 2026
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    className="shrink-0 rounded-md border border-border bg-background px-2 py-1 text-[11px] font-medium hover:bg-muted"
+                  >
+                    Profile
+                  </a>
+                </div>
+                <div className="mt-3 flex items-center justify-between gap-2 border-t border-border pt-3 text-xs">
+                  <div className="text-muted-foreground">
+                    <span className="font-medium text-foreground">0</span> investments
+                  </div>
+                  <a
+                    href="#"
+                    className="flex items-center gap-1 font-medium text-primary hover:underline"
+                  >
+                    <Users className="h-3.5 w-3.5" />
+                    Member directory
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
               </div>
             </header>
 
