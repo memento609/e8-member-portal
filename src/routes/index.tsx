@@ -342,50 +342,7 @@ function Index() {
             <section className="grid grid-cols-1 gap-5 lg:grid-cols-12">
               {/* LEFT — membership */}
               <div className="space-y-5 lg:col-span-3">
-                <Card>
-                  <div className="flex items-start gap-3">
-                    <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-muted text-sm font-semibold">
-                      NT
-                    </div>
-                    <div className="min-w-0">
-                      <div className="truncate font-semibold">Nami Turner</div>
-                      <div className="truncate text-xs text-muted-foreground">
-                        nami@nagog.com
-                      </div>
-                      <div className="mt-0.5 text-[11px] text-muted-foreground">
-                        Member since June 2026
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="mt-4 border-t border-border pt-3">
-                    <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                      Recent investments
-                    </div>
-                    <div className="mt-1 text-sm text-muted-foreground">
-                      No investments yet.
-                    </div>
-                    <a
-                      href="#"
-                      className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-                    >
-                      View all investments <ArrowRight className="h-3.5 w-3.5" />
-                    </a>
-                  </div>
-
-                  <div className="mt-4 border-t border-border pt-3">
-                    <a
-                      href="#"
-                      className="flex items-center justify-between rounded-lg bg-muted px-3 py-2 text-sm font-medium hover:bg-secondary"
-                    >
-                      <span className="flex items-center gap-2">
-                        <Users className="h-4 w-4" />
-                        Member directory
-                      </span>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                    </a>
-                  </div>
-                </Card>
 
                 <Card>
                   <div className="mb-3 flex items-center justify-between">
