@@ -62,6 +62,11 @@ const forkStages = [
   { name: "direct invest", count: 1 },
   { name: "fund vote", count: 1 },
 ];
+const followOnStages = [
+  { name: "diligence", count: 3 },
+  { name: "debrief", count: 2 },
+  { name: "investment ready", count: 1 },
+];
 const decarbonStages = [
   { name: "screening committee", count: 6 },
   { name: "sept. presentation", count: 3 },
