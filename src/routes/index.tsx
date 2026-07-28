@@ -62,6 +62,11 @@ const forkStages = [
   { name: "direct invest", count: 1 },
   { name: "fund vote", count: 1 },
 ];
+const followOnStages = [
+  { name: "diligence", count: 3 },
+  { name: "debrief", count: 2 },
+  { name: "investment ready", count: 1 },
+];
 const decarbonStages = [
   { name: "screening committee", count: 6 },
   { name: "sept. presentation", count: 3 },
@@ -317,6 +322,28 @@ function Index() {
                 </div>
                 <div className="mt-3 text-right text-[11px] text-muted-foreground">
                   shared stages — fork at investment
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-semibold tracking-tight">
+                    Portfolio follow-ons{" "}
+                    <span className="text-muted-foreground font-normal">
+                      (existing companies raising)
+                    </span>
+                  </h2>
+                  <a
+                    href="#"
+                    className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                  >
+                    view full pipeline <ArrowRight className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {followOnStages.map((s) => (
+                    <StageCard key={s.name} name={s.name} count={s.count} />
+                  ))}
                 </div>
               </div>
 
