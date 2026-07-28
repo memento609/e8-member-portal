@@ -51,7 +51,7 @@ const nav = [
 ];
 
 const mainStages = [
-  { name: "sourcing", count: 12 },
+  { name: "pre-screening", count: 12 },
   { name: "screening", count: 4 },
   { name: "pitch", count: 3 },
   { name: "follow-up", count: 2 },
