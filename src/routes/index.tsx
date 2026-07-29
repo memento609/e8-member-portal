@@ -184,6 +184,11 @@ const calendar = [
 
 function Index() {
   const [navOpen, setNavOpen] = useState(false);
+  const [dilIdx, setDilIdx] = useState(0);
+  const dilCount = diligenceCompanies.length;
+  const dilCompany = diligenceCompanies[dilIdx];
+  const nextDil = () => setDilIdx((i) => (i + 1) % dilCount);
+  const prevDil = () => setDilIdx((i) => (i - 1 + dilCount) % dilCount);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
