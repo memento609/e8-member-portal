@@ -758,12 +758,12 @@ function StageCard({
 }) {
   return (
     <div
-      className={`flex min-w-[110px] flex-1 flex-col justify-between rounded-xl border border-border bg-background ${
-        compact ? "px-4 py-3" : "px-4 py-4"
+      className={`flex min-w-[88px] flex-1 flex-col justify-between rounded-lg border border-border bg-background ${
+        compact ? "px-2.5 py-1.5" : "px-3 py-2"
       } ${accent ? "ring-1 ring-accent/40" : ""}`}
     >
-      <div className="text-xs font-medium text-muted-foreground">{name}</div>
-      <div className="mt-1 text-2xl font-semibold tracking-tight">
+      <div className="text-[11px] font-medium leading-tight text-muted-foreground">{name}</div>
+      <div className="mt-0.5 text-lg font-semibold leading-tight tracking-tight">
         {count === null ? "—" : count}
       </div>
     </div>
