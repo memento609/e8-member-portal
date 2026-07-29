@@ -15,6 +15,7 @@ import {
   MessageSquare,
   ArrowRight,
   ChevronRight,
+  ChevronLeft,
   Bell,
   Sparkles,
 } from "lucide-react";
