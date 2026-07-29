@@ -453,13 +453,13 @@ function Index() {
 
                 <Card>
                   <div className="mb-3 flex items-center justify-between">
-                    <h3 className="font-semibold">E8 Calendar</h3>
+                    <h3 className="font-semibold">E8 Events</h3>
                     <a href="#" className="text-xs font-medium text-primary hover:underline">
                       View all →
                     </a>
                   </div>
                   <ul className="space-y-3">
-                    {calendar.map((e, i) => (
+                    {calendar.slice(0, 2).map((e, i) => (
                       <li key={i} className="flex gap-3">
                         <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent" />
                         <div className="min-w-0 flex-1">
