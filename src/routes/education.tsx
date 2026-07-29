@@ -523,12 +523,46 @@ function EducationPage() {
               )}
             </div>
 
-            {(tab === "primer" || tab === "labs") && (
+            {tab === "primer" && (
               <div className="space-y-4">
                 {sections.map((s) => (
                   <SectionCard key={s.id} section={s} />
                 ))}
               </div>
+            )}
+
+            {tab === "labs" && (
+              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {learningLabs.map((lab) => (
+                  <li
+                    key={lab.id}
+                    className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40"
+                  >
+                    <div className="relative aspect-video bg-gradient-to-br from-primary/25 via-primary/10 to-secondary">
+                      <div className="absolute inset-0 grid place-items-center">
+                        <div className="grid h-12 w-12 place-items-center rounded-full bg-background/90 text-primary shadow-md transition-transform group-hover:scale-110">
+                          <PlayCircle className="h-6 w-6" />
+                        </div>
+                      </div>
+                      <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-2 py-0.5 text-[11px] font-medium text-white">
+                        {lab.duration}
+                      </div>
+                    </div>
+                    <div className="flex flex-1 flex-col p-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-wide text-primary">
+                        {lab.topic}
+                      </div>
+                      <div className="mt-1 text-sm font-semibold leading-snug text-foreground">
+                        {lab.title}
+                      </div>
+                      <div className="mt-2 text-xs text-muted-foreground">{lab.speaker}</div>
+                      <div className="mt-auto pt-3 text-[11px] text-muted-foreground">
+                        Recorded {lab.date}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             )}
 
             {tab === "guidance" && (
