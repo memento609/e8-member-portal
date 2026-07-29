@@ -21,6 +21,10 @@ import {
   CheckCircle2,
   Search,
   Bell,
+  Compass as CompassIcon,
+  Lightbulb,
+  Link as LinkIcon,
+  Download,
 } from "lucide-react";
 
 export const Route = createFileRoute("/education")({
