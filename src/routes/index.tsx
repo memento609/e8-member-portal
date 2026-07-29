@@ -379,11 +379,10 @@ function Index() {
               </div>
             </header>
 
-            {/* Pipeline HERO */}
-            <section className="mb-6 space-y-4">
-              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-semibold tracking-tight">
+            <section className="mb-6 space-y-3">
+              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm md:p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <h2 className="text-sm font-semibold tracking-tight">
                     Main pipeline{" "}
                     <span className="text-muted-foreground font-normal">
                       (Direct + Fund)
@@ -391,33 +390,33 @@ function Index() {
                   </h2>
                   <a
                     href="#"
-                    className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                    className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                   >
-                    view full pipeline <ArrowRight className="h-3.5 w-3.5" />
+                    view full pipeline <ArrowRight className="h-3 w-3" />
                   </a>
                 </div>
 
-                <div className="flex gap-3 overflow-x-auto pb-1">
-                  <div className="flex min-w-0 flex-1 gap-3">
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  <div className="flex min-w-0 flex-1 gap-2">
                     {mainStages.map((s) => (
                       <StageCard key={s.name} name={s.name} count={s.count} />
                     ))}
                   </div>
-                  <div className="mx-1 hidden border-l border-dashed border-border md:block" />
-                  <div className="flex shrink-0 flex-col gap-2">
+                  <div className="mx-0.5 hidden border-l border-dashed border-border md:block" />
+                  <div className="flex shrink-0 flex-col gap-1.5">
                     {forkStages.map((s) => (
                       <StageCard key={s.name} name={s.name} count={s.count} compact accent />
                     ))}
                   </div>
                 </div>
-                <div className="mt-3 text-right text-[11px] text-muted-foreground">
+                <div className="mt-2 text-right text-[10px] text-muted-foreground">
                   shared stages — fork at investment
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-semibold tracking-tight">
+              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm md:p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <h2 className="text-sm font-semibold tracking-tight">
                     Portfolio follow-ons{" "}
                     <span className="text-muted-foreground font-normal">
                       (existing companies raising)
@@ -425,29 +424,29 @@ function Index() {
                   </h2>
                   <a
                     href="#"
-                    className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                    className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                   >
-                    view full pipeline <ArrowRight className="h-3.5 w-3.5" />
+                    view full pipeline <ArrowRight className="h-3 w-3" />
                   </a>
                 </div>
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div className="grid gap-2 sm:grid-cols-3">
                   {followOnStages.map((s) => (
                     <StageCard key={s.name} name={s.name} count={s.count} />
                   ))}
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-6">
-                <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-lg font-semibold tracking-tight">Decarbon8</h2>
+              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm md:p-4">
+                <div className="mb-2 flex items-center justify-between">
+                  <h2 className="text-sm font-semibold tracking-tight">Decarbon8</h2>
                   <a
                     href="#"
-                    className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                    className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
                   >
-                    view full pipeline <ArrowRight className="h-3.5 w-3.5" />
+                    view full pipeline <ArrowRight className="h-3 w-3" />
                   </a>
                 </div>
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div className="grid gap-2 sm:grid-cols-3">
                   {decarbonStages.map((s) => (
                     <StageCard key={s.name} name={s.name} count={s.count} />
                   ))}
@@ -758,12 +757,12 @@ function StageCard({
 }) {
   return (
     <div
-      className={`flex min-w-[110px] flex-1 flex-col justify-between rounded-xl border border-border bg-background ${
-        compact ? "px-4 py-3" : "px-4 py-4"
+      className={`flex min-w-[88px] flex-1 flex-col justify-between rounded-lg border border-border bg-background ${
+        compact ? "px-2.5 py-1.5" : "px-3 py-2"
       } ${accent ? "ring-1 ring-accent/40" : ""}`}
     >
-      <div className="text-xs font-medium text-muted-foreground">{name}</div>
-      <div className="mt-1 text-2xl font-semibold tracking-tight">
+      <div className="text-[11px] font-medium leading-tight text-muted-foreground">{name}</div>
+      <div className="mt-0.5 text-lg font-semibold leading-tight tracking-tight">
         {count === null ? "—" : count}
       </div>
     </div>
