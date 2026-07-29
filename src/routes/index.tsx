@@ -15,6 +15,7 @@ import {
   MessageSquare,
   ArrowRight,
   ChevronRight,
+  ChevronLeft,
   Bell,
   Sparkles,
 } from "lucide-react";
@@ -73,6 +74,80 @@ const decarbonStages = [
   { name: "co-invest / donate", count: null as number | null },
 ];
 
+type DiligenceStatus = "Team forming" | "Ongoing" | "Review";
+const diligenceCompanies: {
+  name: string;
+  initials: string;
+  tag?: string;
+  status: DiligenceStatus;
+  lead?: string;
+  team: string[];
+  teamFull: string;
+  blurb: string;
+}[] = [
+  {
+    name: "NALA Membranes",
+    initials: "NALA",
+    status: "Ongoing",
+    lead: "Arielle Cohen",
+    team: ["AC", "JC", "KG", "SG", "SW", "PA"],
+    teamFull: "Arielle Cohen (Lead), Jeff Canin, Kathryn Gardow, Steven Gold, Susan Wall, Paulina A. Echeverria (Fellow)",
+    blurb:
+      "Commercializing the first new membranes in 40 years to reduce the cost and climate impact of advanced water treatment.",
+  },
+  {
+    name: "PhytoGenesis",
+    initials: "PG",
+    tag: "DECARBON8",
+    status: "Team forming",
+    team: [],
+    teamFull: "Team forming — sign up in Slack",
+    blurb:
+      "A scalable biological platform that activates innate plant immunity to deliver season-long disease protection, climate resilience, higher yields, and lower production costs.",
+  },
+  {
+    name: "Raya Power",
+    initials: "RP",
+    tag: "DECARBON8",
+    status: "Team forming",
+    team: [],
+    teamFull: "Team forming — sign up in Slack",
+    blurb:
+      "Delivers resilience to the 80% of Americans with no viable path to affordable, resilient energy: a solar + storage system that installs in a backyard in 3 hours, no permits, with automatic backup and scalable bill savings.",
+  },
+  {
+    name: "Root Applied Sciences",
+    initials: "RT",
+    tag: "DECARBON8",
+    status: "Ongoing",
+    lead: "Kathryn Gardow",
+    team: ["KG", "JC", "SW"],
+    teamFull: "Kathryn Gardow (Lead), Jeff Canin, Susan Wall",
+    blurb:
+      "Provides farmers with regular information on airborne pathogens while they are still in the air, before they land on crops — improving resilience and reducing costs.",
+  },
+  {
+    name: "Andros Innovations",
+    initials: "AI",
+    tag: "DECARBON8",
+    status: "Review",
+    lead: "Steven Gold",
+    team: ["SG", "AC", "PA"],
+    teamFull: "Steven Gold (Lead), Arielle Cohen, Paulina A. Echeverria",
+    blurb:
+      "Developing a chemical-looping ammonia reactor that uses atmospheric pressure and moderate temperature to enable lower-cost, distributed ammonia plants.",
+  },
+  {
+    name: "Harmony Desalting",
+    initials: "HD",
+    tag: "DECARBON8",
+    status: "Team forming",
+    team: [],
+    teamFull: "Team forming — sign up in Slack",
+    blurb: "Advanced desalting for superior performance.",
+  },
+];
+
 const ticker = [
   { kind: "slack", who: "E8 Slack", text: "First State to halt new Data Centers (via Pitchbook)" },
   { kind: "slack", who: "Jim", text: "Another Sparkfund thought piece (awaiting conversion to revenue)" },
@@ -109,6 +184,11 @@ const calendar = [
 
 function Index() {
   const [navOpen, setNavOpen] = useState(false);
+  const [dilIdx, setDilIdx] = useState(0);
+  const dilCount = diligenceCompanies.length;
+  const dilCompany = diligenceCompanies[dilIdx];
+  const nextDil = () => setDilIdx((i) => (i + 1) % dilCount);
+  const prevDil = () => setDilIdx((i) => (i - 1 + dilCount) % dilCount);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -428,36 +508,79 @@ function Index() {
                     <div className="flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-chart-1" />
                       <h3 className="font-semibold">Diligence</h3>
-                      <span className="text-xs text-muted-foreground">1 active</span>
+                      <span className="text-xs text-muted-foreground">
+                        {dilIdx + 1} of {dilCount} active
+                      </span>
                     </div>
-                    <a href="#" className="text-xs font-medium text-primary hover:underline">
-                      All deals →
-                    </a>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={prevDil}
+                        aria-label="Previous company"
+                        className="grid h-7 w-7 place-items-center rounded-md border border-border bg-background text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={nextDil}
+                        aria-label="Next company"
+                        className="grid h-7 w-7 place-items-center rounded-md border border-border bg-background text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                      <a href="#" className="ml-1 text-xs font-medium text-primary hover:underline">
+                        All →
+                      </a>
+                    </div>
                   </div>
-                  <div className="rounded-xl border border-border bg-background p-4">
+
+                  <div className="relative rounded-xl border border-border bg-background p-4">
+                    {dilCompany.tag && (
+                      <span className="absolute right-3 top-3 text-[10px] font-bold tracking-wide text-muted-foreground">
+                        {dilCompany.tag}
+                      </span>
+                    )}
                     <div className="flex items-start gap-3">
                       <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-muted text-[10px] font-bold">
-                        NALA
+                        {dilCompany.initials}
                       </div>
-                      <div className="min-w-0">
-                        <div className="font-semibold">NALA Membranes</div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <div className="font-semibold">{dilCompany.name}</div>
+                          <StatusBadge status={dilCompany.status} />
+                        </div>
                         <div className="mt-1 text-sm text-muted-foreground">
-                          Commercializing the first new membranes in 40 years to reduce the
-                          cost and climate impact of advanced water treatment.
+                          {dilCompany.blurb}
                         </div>
                         <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
-                          <Chip>AC</Chip>
-                          <Chip>JC</Chip>
-                          <Chip>KG</Chip>
-                          <Chip>SG</Chip>
-                          <Chip>SW</Chip>
-                          <Chip>PA</Chip>
-                          <span className="ml-1">
-                            Arielle Cohen (Lead), Jeff Canin, Kathryn Gardow, Steven Gold…
-                          </span>
+                          {dilCompany.team.length > 0 ? (
+                            <>
+                              {dilCompany.team.map((t) => (
+                                <Chip key={t}>{t}</Chip>
+                              ))}
+                              <span className="ml-1">{dilCompany.teamFull}</span>
+                            </>
+                          ) : (
+                            <span className="italic">{dilCompany.teamFull}</span>
+                          )}
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-center gap-1.5">
+                    {diligenceCompanies.map((c, i) => (
+                      <button
+                        key={c.name}
+                        type="button"
+                        onClick={() => setDilIdx(i)}
+                        aria-label={`Show ${c.name}`}
+                        className={`h-1.5 rounded-full transition-all ${
+                          i === dilIdx ? "w-6 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground/40"
+                        }`}
+                      />
+                    ))}
                   </div>
                 </Card>
 
@@ -589,6 +712,28 @@ function Chip({ children }: { children: React.ReactNode }) {
     </span>
   );
 }
+
+function StatusBadge({ status }: { status: DiligenceStatus }) {
+  const styles: Record<DiligenceStatus, string> = {
+    "Team forming": "border-chart-4/40 bg-chart-4/10 text-chart-4",
+    Ongoing: "border-chart-1/40 bg-chart-1/10 text-chart-1",
+    Review: "border-chart-5/40 bg-chart-5/15 text-chart-5",
+  };
+  const dot: Record<DiligenceStatus, string> = {
+    "Team forming": "bg-chart-4",
+    Ongoing: "bg-chart-1 animate-pulse",
+    Review: "bg-chart-5",
+  };
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${styles[status]}`}
+    >
+      <span className={`h-1.5 w-1.5 rounded-full ${dot[status]}`} />
+      {status}
+    </span>
+  );
+}
+
 
 function StageCard({
   name,
