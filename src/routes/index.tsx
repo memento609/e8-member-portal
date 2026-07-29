@@ -74,6 +74,80 @@ const decarbonStages = [
   { name: "co-invest / donate", count: null as number | null },
 ];
 
+type DiligenceStatus = "Team forming" | "Ongoing" | "Review";
+const diligenceCompanies: {
+  name: string;
+  initials: string;
+  tag?: string;
+  status: DiligenceStatus;
+  lead?: string;
+  team: string[];
+  teamFull: string;
+  blurb: string;
+}[] = [
+  {
+    name: "NALA Membranes",
+    initials: "NALA",
+    status: "Ongoing",
+    lead: "Arielle Cohen",
+    team: ["AC", "JC", "KG", "SG", "SW", "PA"],
+    teamFull: "Arielle Cohen (Lead), Jeff Canin, Kathryn Gardow, Steven Gold, Susan Wall, Paulina A. Echeverria (Fellow)",
+    blurb:
+      "Commercializing the first new membranes in 40 years to reduce the cost and climate impact of advanced water treatment.",
+  },
+  {
+    name: "PhytoGenesis",
+    initials: "PG",
+    tag: "DECARBON8",
+    status: "Team forming",
+    team: [],
+    teamFull: "Team forming — sign up in Slack",
+    blurb:
+      "A scalable biological platform that activates innate plant immunity to deliver season-long disease protection, climate resilience, higher yields, and lower production costs.",
+  },
+  {
+    name: "Raya Power",
+    initials: "RP",
+    tag: "DECARBON8",
+    status: "Team forming",
+    team: [],
+    teamFull: "Team forming — sign up in Slack",
+    blurb:
+      "Delivers resilience to the 80% of Americans with no viable path to affordable, resilient energy: a solar + storage system that installs in a backyard in 3 hours, no permits, with automatic backup and scalable bill savings.",
+  },
+  {
+    name: "Root Applied Sciences",
+    initials: "RT",
+    tag: "DECARBON8",
+    status: "Ongoing",
+    lead: "Kathryn Gardow",
+    team: ["KG", "JC", "SW"],
+    teamFull: "Kathryn Gardow (Lead), Jeff Canin, Susan Wall",
+    blurb:
+      "Provides farmers with regular information on airborne pathogens while they are still in the air, before they land on crops — improving resilience and reducing costs.",
+  },
+  {
+    name: "Andros Innovations",
+    initials: "AI",
+    tag: "DECARBON8",
+    status: "Review",
+    lead: "Steven Gold",
+    team: ["SG", "AC", "PA"],
+    teamFull: "Steven Gold (Lead), Arielle Cohen, Paulina A. Echeverria",
+    blurb:
+      "Developing a chemical-looping ammonia reactor that uses atmospheric pressure and moderate temperature to enable lower-cost, distributed ammonia plants.",
+  },
+  {
+    name: "Harmony Desalting",
+    initials: "HD",
+    tag: "DECARBON8",
+    status: "Team forming",
+    team: [],
+    teamFull: "Team forming — sign up in Slack",
+    blurb: "Advanced desalting for superior performance.",
+  },
+];
+
 const ticker = [
   { kind: "slack", who: "E8 Slack", text: "First State to halt new Data Centers (via Pitchbook)" },
   { kind: "slack", who: "Jim", text: "Another Sparkfund thought piece (awaiting conversion to revenue)" },
