@@ -713,6 +713,26 @@ function Chip({ children }: { children: React.ReactNode }) {
   );
 }
 
+function StatusBadge({ status }: { status: DiligenceStatus }) {
+  const styles: Record<DiligenceStatus, string> = {
+    "Team forming": "border-chart-4/40 bg-chart-4/10 text-chart-4",
+    Ongoing: "border-chart-1/40 bg-chart-1/10 text-chart-1",
+    Review: "border-chart-5/40 bg-chart-5/15 text-chart-5",
+  };
+  const dot: Record<DiligenceStatus, string> = {
+    "Team forming": "bg-chart-4",
+    Ongoing: "bg-chart-1 animate-pulse",
+    Review: "bg-chart-5",
+  };
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${styles[status]}`}
+    >
+      <span className={`h-1.5 w-1.5 rounded-full ${dot[status]}`} />
+      {status}
+    </span>
+  );
+
 function StageCard({
   name,
   count,
