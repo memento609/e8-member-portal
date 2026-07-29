@@ -350,11 +350,35 @@ const resourceLinks = [
   },
 ];
 
+type LabSort = "newest" | "oldest" | "shortest" | "longest";
+
+function parseLabDate(d: string) {
+  return new Date(d).getTime();
+}
+function parseDurationMins(d: string) {
+  const m = d.match(/\d+/);
+  return m ? parseInt(m[0], 10) : 0;
+}
+
 function EducationPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("primer");
+  const [labSort, setLabSort] = useState<LabSort>("newest");
 
   const sections = tab === "primer" ? primer : [];
+
+  const sortedLabs = [...learningLabs].sort((a, b) => {
+    switch (labSort) {
+      case "newest":
+        return parseLabDate(b.date) - parseLabDate(a.date);
+      case "oldest":
+        return parseLabDate(a.date) - parseLabDate(b.date);
+      case "shortest":
+        return parseDurationMins(a.duration) - parseDurationMins(b.duration);
+      case "longest":
+        return parseDurationMins(b.duration) - parseDurationMins(a.duration);
+    }
+  });
 
   return (
     <div className="min-h-screen bg-background">
