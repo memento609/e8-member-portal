@@ -132,6 +132,41 @@
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
+/* E8 site-inspired theme: dark forest green with teal accents */
+.theme-e8site {
+  --background: oklch(0.22 0.03 155);
+  --foreground: oklch(0.97 0.01 90);
+  --card: oklch(0.26 0.035 155);
+  --card-foreground: oklch(0.97 0.01 90);
+  --popover: oklch(0.26 0.035 155);
+  --popover-foreground: oklch(0.97 0.01 90);
+  --primary: oklch(0.78 0.13 180);
+  --primary-foreground: oklch(0.18 0.04 155);
+  --secondary: oklch(0.3 0.03 155);
+  --secondary-foreground: oklch(0.97 0.01 90);
+  --muted: oklch(0.3 0.025 155);
+  --muted-foreground: oklch(0.78 0.02 100);
+  --accent: oklch(0.78 0.13 180);
+  --accent-foreground: oklch(0.18 0.04 155);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.78 0.13 180);
+  --sidebar: oklch(0.18 0.035 155);
+  --sidebar-foreground: oklch(0.95 0.01 90);
+  --sidebar-primary: oklch(0.78 0.13 180);
+  --sidebar-primary-foreground: oklch(0.18 0.04 155);
+  --sidebar-accent: oklch(0.28 0.035 155);
+  --sidebar-accent-foreground: oklch(0.97 0.01 90);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.78 0.13 180);
+}
+.theme-e8site h1,
+.theme-e8site h2,
+.theme-e8site h3 {
+  font-family: ui-serif, Georgia, "Times New Roman", serif;
+  letter-spacing: -0.01em;
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -142,3 +177,4 @@
     color: var(--color-foreground);
   }
 }
+

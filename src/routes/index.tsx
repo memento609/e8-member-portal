@@ -187,13 +187,33 @@ const calendar = [
 function Index() {
   const [navOpen, setNavOpen] = useState(false);
   const [dilIdx, setDilIdx] = useState(0);
+  const [themeE8, setThemeE8] = useState(false);
   const dilCount = diligenceCompanies.length;
   const dilCompany = diligenceCompanies[dilIdx];
   const nextDil = () => setDilIdx((i) => (i + 1) % dilCount);
   const prevDil = () => setDilIdx((i) => (i - 1 + dilCount) % dilCount);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className={`min-h-screen bg-background text-foreground ${themeE8 ? "theme-e8site" : ""}`}>
+      {/* Demo theme toggle */}
+      <div className="sticky top-0 z-50 flex items-center justify-end gap-2 border-b border-border bg-background/80 px-4 py-2 backdrop-blur">
+        <span className="text-[11px] uppercase tracking-widest text-muted-foreground">Demo theme</span>
+        <div className="inline-flex overflow-hidden rounded-full border border-border text-xs">
+          <button
+            onClick={() => setThemeE8(false)}
+            className={`px-3 py-1 transition-colors ${!themeE8 ? "bg-primary text-primary-foreground" : "bg-transparent text-muted-foreground hover:bg-muted"}`}
+          >
+            Basic
+          </button>
+          <button
+            onClick={() => setThemeE8(true)}
+            className={`px-3 py-1 transition-colors ${themeE8 ? "bg-primary text-primary-foreground" : "bg-transparent text-muted-foreground hover:bg-muted"}`}
+          >
+            E8 site style
+          </button>
+        </div>
+      </div>
+
       {/* Mobile top bar */}
       <div className="flex items-center justify-between border-b border-border bg-sidebar px-4 py-3 md:hidden">
         <div className="flex items-center gap-2">
