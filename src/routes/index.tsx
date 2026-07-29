@@ -343,7 +343,7 @@ function Index() {
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm font-semibold">Nami Turner</div>
                     <div className="truncate text-[11px] text-muted-foreground">
-                      nami@nagog.com · Member since Jun 2026
+                      Member since Jun 2026
                     </div>
                   </div>
                   <a
