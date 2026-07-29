@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "sdk_version": "0.25.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "e8-portal-mcp",
+      "version": "0.1.0",
+      "title": "E8 Portal MCP"
+    },
+    "tools": [
+      {
+        "name": "get_pipeline",
+        "title": "Get deal pipeline",
+        "description": "Return counts by stage for the E8 portal deal pipelines: main pipeline (with direct-invest/fund-vote fork), portfolio follow-ons, and the Decarbon8 pipeline.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "pipeline": {
+              "default": "all",
+              "description": "Which pipeline to return. Defaults to all.",
+              "type": "string",
+              "enum": [
+                "main",
+                "follow_ons",
+                "decarbon8",
+                "all"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_diligence",
+        "title": "List diligence companies",
+        "description": "List companies currently under diligence at E8, including team, lead, blurb, status (Team forming / Ongoing / Review), and Decarbon8 tag when applicable.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "default": "any",
+              "description": "Filter by diligence status. Use 'any' for all companies.",
+              "type": "string",
+              "enum": [
+                "Team forming",
+                "Ongoing",
+                "Review",
+                "any"
+              ]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_events",
+        "title": "List E8 events",
+        "description": "List upcoming E8 member events (pitches, follow-up Q&As, meetings).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "default": 10,
+              "description": "Maximum number of events to return.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_portfolio_news",
+        "title": "List portfolio news",
+        "description": "Return recent news items about E8 portfolio companies, plus the top-of-portal ticker items (Slack highlights and 'what's new' announcements).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "include_ticker": {
+              "default": true,
+              "description": "If true, also include the top-of-portal ticker items.",
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
