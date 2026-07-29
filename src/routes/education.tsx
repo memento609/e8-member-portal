@@ -264,11 +264,64 @@ function SectionCard({ section }: { section: Section }) {
   );
 }
 
+type Tab = "primer" | "labs" | "guidance" | "resources";
+
+const guidanceItems = [
+  {
+    title: "E8 Investment Thesis & Values",
+    desc: "How we evaluate deals, what we fund, and what we won't.",
+  },
+  {
+    title: "Member Code of Conduct",
+    desc: "Confidentiality, conflicts of interest, and community norms.",
+  },
+  {
+    title: "Diligence Playbook",
+    desc: "Step-by-step guide for leading or joining a diligence team.",
+  },
+  {
+    title: "Deal Memo Template",
+    desc: "The structure we use for pitch summaries and diligence write-ups.",
+  },
+  {
+    title: "Voting & Follow-on Guidelines",
+    desc: "How fund votes work and when we participate in follow-on rounds.",
+  },
+];
+
+const resourceLinks = [
+  {
+    title: "Angel Capital Association",
+    desc: "National trade association for accredited angel investors.",
+    href: "#",
+  },
+  {
+    title: "Holloway Guide to Raising Venture Capital",
+    desc: "Founder-side reference that helps you spot fundraising red flags.",
+    href: "#",
+  },
+  {
+    title: "SAFE Financing Documents (Y Combinator)",
+    desc: "The canonical SAFE templates and post-money primer.",
+    href: "#",
+  },
+  {
+    title: "NVCA Model Legal Documents",
+    desc: "Industry-standard term sheets and definitive agreements.",
+    href: "#",
+  },
+  {
+    title: "Climate Tech VC Newsletter",
+    desc: "Weekly market intel on climate deals, funds, and policy.",
+    href: "#",
+  },
+];
+
 function EducationPage() {
   const [navOpen, setNavOpen] = useState(false);
-  const [tab, setTab] = useState<"labs" | "primer">("labs");
+  const [tab, setTab] = useState<Tab>("primer");
 
-  const sections = tab === "labs" ? learningLabs : primer;
+  const sections = tab === "primer" ? primer : tab === "labs" ? learningLabs : [];
 
   return (
     <div className="min-h-screen bg-background">
