@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   Menu,
@@ -18,6 +18,7 @@ import {
   ChevronLeft,
   Bell,
   Sparkles,
+  GraduationCap,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -40,13 +41,14 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const nav = [
-  { label: "Home", icon: HomeIcon, active: true },
+const nav: { label: string; icon: typeof HomeIcon; active?: boolean; to?: string }[] = [
+  { label: "Home", icon: HomeIcon, active: true, to: "/" },
   { label: "Pipeline", icon: GitBranch },
   { label: "Calendar", icon: CalendarIcon },
   { label: "Recordings", icon: Video },
   { label: "E8 Fund", icon: Coins },
   { label: "Portfolio News", icon: Newspaper },
+  { label: "Education", icon: GraduationCap, to: "/education" },
   { label: "Member Directory", icon: Users },
   { label: "Explore", icon: Compass },
 ];
@@ -244,20 +246,28 @@ function Index() {
             </div>
 
             <nav className="mt-4 flex-1 space-y-0.5 px-3">
-              {nav.map((item) => (
-                <a
-                  key={item.label}
-                  href="#"
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                    item.active
-                      ? "bg-primary text-primary-foreground"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent"
-                  }`}
-                >
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.label}</span>
-                </a>
-              ))}
+              {nav.map((item) => {
+                const className = `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                  item.active
+                    ? "bg-primary text-primary-foreground"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent"
+                }`;
+                const inner = (
+                  <>
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </>
+                );
+                return item.to ? (
+                  <Link key={item.label} to={item.to} className={className}>
+                    {inner}
+                  </Link>
+                ) : (
+                  <a key={item.label} href="#" className={className}>
+                    {inner}
+                  </a>
+                );
+              })}
             </nav>
 
             <div className="border-t border-sidebar-border p-3">
