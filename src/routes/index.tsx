@@ -41,13 +41,14 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const nav = [
-  { label: "Home", icon: HomeIcon, active: true },
+const nav: { label: string; icon: typeof HomeIcon; active?: boolean; to?: string }[] = [
+  { label: "Home", icon: HomeIcon, active: true, to: "/" },
   { label: "Pipeline", icon: GitBranch },
   { label: "Calendar", icon: CalendarIcon },
   { label: "Recordings", icon: Video },
   { label: "E8 Fund", icon: Coins },
   { label: "Portfolio News", icon: Newspaper },
+  { label: "Education", icon: GraduationCap, to: "/education" },
   { label: "Member Directory", icon: Users },
   { label: "Explore", icon: Compass },
 ];
