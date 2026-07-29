@@ -732,6 +732,8 @@ function StatusBadge({ status }: { status: DiligenceStatus }) {
       {status}
     </span>
   );
+}
+
 
 function StageCard({
   name,
