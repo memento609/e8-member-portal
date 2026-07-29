@@ -18,6 +18,7 @@ import {
   ChevronLeft,
   Bell,
   Sparkles,
+  GraduationCap,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
