@@ -350,11 +350,35 @@ const resourceLinks = [
   },
 ];
 
+type LabSort = "newest" | "oldest" | "shortest" | "longest";
+
+function parseLabDate(d: string) {
+  return new Date(d).getTime();
+}
+function parseDurationMins(d: string) {
+  const m = d.match(/\d+/);
+  return m ? parseInt(m[0], 10) : 0;
+}
+
 function EducationPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("primer");
+  const [labSort, setLabSort] = useState<LabSort>("newest");
 
   const sections = tab === "primer" ? primer : [];
+
+  const sortedLabs = [...learningLabs].sort((a, b) => {
+    switch (labSort) {
+      case "newest":
+        return parseLabDate(b.date) - parseLabDate(a.date);
+      case "oldest":
+        return parseLabDate(a.date) - parseLabDate(b.date);
+      case "shortest":
+        return parseDurationMins(a.duration) - parseDurationMins(b.duration);
+      case "longest":
+        return parseDurationMins(b.duration) - parseDurationMins(a.duration);
+    }
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -532,37 +556,63 @@ function EducationPage() {
             )}
 
             {tab === "labs" && (
-              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {learningLabs.map((lab) => (
-                  <li
-                    key={lab.id}
-                    className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40"
-                  >
-                    <div className="relative aspect-video bg-gradient-to-br from-primary/25 via-primary/10 to-secondary">
-                      <div className="absolute inset-0 grid place-items-center">
-                        <div className="grid h-12 w-12 place-items-center rounded-full bg-background/90 text-primary shadow-md transition-transform group-hover:scale-110">
-                          <PlayCircle className="h-6 w-6" />
+              <>
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                  <div className="text-xs text-muted-foreground">
+                    {sortedLabs.length} recordings
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <label
+                      htmlFor="lab-sort"
+                      className="text-xs font-medium text-muted-foreground"
+                    >
+                      Sort by
+                    </label>
+                    <select
+                      id="lab-sort"
+                      value={labSort}
+                      onChange={(e) => setLabSort(e.target.value as LabSort)}
+                      className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="newest">Newest first</option>
+                      <option value="oldest">Oldest first</option>
+                      <option value="shortest">Shortest first</option>
+                      <option value="longest">Longest first</option>
+                    </select>
+                  </div>
+                </div>
+                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {sortedLabs.map((lab) => (
+                    <li
+                      key={lab.id}
+                      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40"
+                    >
+                      <div className="relative aspect-video bg-gradient-to-br from-primary/25 via-primary/10 to-secondary">
+                        <div className="absolute inset-0 grid place-items-center">
+                          <div className="grid h-12 w-12 place-items-center rounded-full bg-background/90 text-primary shadow-md transition-transform group-hover:scale-110">
+                            <PlayCircle className="h-6 w-6" />
+                          </div>
+                        </div>
+                        <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-2 py-0.5 text-[11px] font-medium text-white">
+                          {lab.duration}
                         </div>
                       </div>
-                      <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-2 py-0.5 text-[11px] font-medium text-white">
-                        {lab.duration}
+                      <div className="flex flex-1 flex-col p-4">
+                        <div className="text-[11px] font-semibold uppercase tracking-wide text-primary">
+                          {lab.topic}
+                        </div>
+                        <div className="mt-1 text-sm font-semibold leading-snug text-foreground">
+                          {lab.title}
+                        </div>
+                        <div className="mt-2 text-xs text-muted-foreground">{lab.speaker}</div>
+                        <div className="mt-auto pt-3 text-[11px] text-muted-foreground">
+                          Recorded {lab.date}
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex flex-1 flex-col p-4">
-                      <div className="text-[11px] font-semibold uppercase tracking-wide text-primary">
-                        {lab.topic}
-                      </div>
-                      <div className="mt-1 text-sm font-semibold leading-snug text-foreground">
-                        {lab.title}
-                      </div>
-                      <div className="mt-2 text-xs text-muted-foreground">{lab.speaker}</div>
-                      <div className="mt-auto pt-3 text-[11px] text-muted-foreground">
-                        Recorded {lab.date}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                    </li>
+                  ))}
+                </ul>
+              </>
             )}
 
             {tab === "guidance" && (
