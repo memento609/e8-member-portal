@@ -75,46 +75,79 @@ type Section = {
   items: Item[];
 };
 
-const learningLabs: Section[] = [
+type Lab = {
+  id: string;
+  title: string;
+  speaker: string;
+  date: string;
+  duration: string;
+  topic: string;
+};
+
+const learningLabs: Lab[] = [
   {
-    id: "ll-1",
-    eyebrow: "Session 12",
+    id: "ll-12",
     title: "Reading a SAFE: Caps, Discounts, and MFN",
-    meta: "Recorded 18 Mar 2026 · 62 mins",
-    resourcesUrl: "#",
-    items: [
-      { title: "Session intro & framing", duration: "6 mins", kind: "video", done: true },
-      { title: "SAFE vs. Convertible Note", duration: "14 mins", kind: "video", done: true },
-      { title: "Valuation cap mechanics", duration: "18 mins", kind: "video" },
-      { title: "Discount + MFN interplay", duration: "12 mins", kind: "video" },
-      { title: "Q&A with the panel", duration: "12 mins", kind: "video" },
-    ],
+    speaker: "Priya Ramaswamy",
+    date: "18 Mar 2026",
+    duration: "62 mins",
+    topic: "Deal structure",
   },
   {
-    id: "ll-2",
-    eyebrow: "Session 11",
+    id: "ll-11",
     title: "Diligence Deep-Dive: Climate Hardware",
-    meta: "Recorded 04 Feb 2026 · 74 mins",
-    resourcesUrl: "#",
-    items: [
-      { title: "Why hardware is different", duration: "9 mins", kind: "video" },
-      { title: "Techno-economic modeling 101", duration: "22 mins", kind: "video" },
-      { title: "Manufacturing & scale risk", duration: "16 mins", kind: "video" },
-      { title: "Panel discussion", duration: "27 mins", kind: "video" },
-    ],
+    speaker: "Marcus Chen",
+    date: "04 Feb 2026",
+    duration: "74 mins",
+    topic: "Diligence",
   },
   {
-    id: "ll-3",
-    eyebrow: "Session 10",
+    id: "ll-10",
     title: "Term Sheets: Preferred Stock Essentials",
-    meta: "Recorded 15 Jan 2026 · 58 mins",
-    resourcesUrl: "#",
-    items: [
-      { title: "Liquidation preferences", duration: "15 mins", kind: "video" },
-      { title: "Anti-dilution provisions", duration: "13 mins", kind: "video" },
-      { title: "Protective provisions & board", duration: "18 mins", kind: "video" },
-      { title: "Worked example: E8 deal", duration: "12 mins", kind: "video" },
-    ],
+    speaker: "Elena Vasquez",
+    date: "15 Jan 2026",
+    duration: "58 mins",
+    topic: "Deal structure",
+  },
+  {
+    id: "ll-9",
+    title: "Pricing Rounds Without a Lead",
+    speaker: "David Okafor",
+    date: "10 Dec 2025",
+    duration: "49 mins",
+    topic: "Deal structure",
+  },
+  {
+    id: "ll-8",
+    title: "Founder Reference Calls That Actually Work",
+    speaker: "Sarah Kim",
+    date: "13 Nov 2025",
+    duration: "44 mins",
+    topic: "Diligence",
+  },
+  {
+    id: "ll-7",
+    title: "Portfolio Construction for Small Checks",
+    speaker: "Jordan Blake",
+    date: "16 Oct 2025",
+    duration: "55 mins",
+    topic: "Strategy",
+  },
+  {
+    id: "ll-6",
+    title: "Sector Spotlight: Grid-Scale Storage",
+    speaker: "Dr. Ana Rivera",
+    date: "18 Sep 2025",
+    duration: "67 mins",
+    topic: "Sector",
+  },
+  {
+    id: "ll-5",
+    title: "Tax & Legal Basics for Angels (QSBS)",
+    speaker: "Thomas Weller",
+    date: "21 Aug 2025",
+    duration: "51 mins",
+    topic: "Legal",
   },
 ];
 
@@ -321,7 +354,7 @@ function EducationPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("primer");
 
-  const sections = tab === "primer" ? primer : tab === "labs" ? learningLabs : [];
+  const sections = tab === "primer" ? primer : [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -490,12 +523,46 @@ function EducationPage() {
               )}
             </div>
 
-            {(tab === "primer" || tab === "labs") && (
+            {tab === "primer" && (
               <div className="space-y-4">
                 {sections.map((s) => (
                   <SectionCard key={s.id} section={s} />
                 ))}
               </div>
+            )}
+
+            {tab === "labs" && (
+              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {learningLabs.map((lab) => (
+                  <li
+                    key={lab.id}
+                    className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/40"
+                  >
+                    <div className="relative aspect-video bg-gradient-to-br from-primary/25 via-primary/10 to-secondary">
+                      <div className="absolute inset-0 grid place-items-center">
+                        <div className="grid h-12 w-12 place-items-center rounded-full bg-background/90 text-primary shadow-md transition-transform group-hover:scale-110">
+                          <PlayCircle className="h-6 w-6" />
+                        </div>
+                      </div>
+                      <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-2 py-0.5 text-[11px] font-medium text-white">
+                        {lab.duration}
+                      </div>
+                    </div>
+                    <div className="flex flex-1 flex-col p-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-wide text-primary">
+                        {lab.topic}
+                      </div>
+                      <div className="mt-1 text-sm font-semibold leading-snug text-foreground">
+                        {lab.title}
+                      </div>
+                      <div className="mt-2 text-xs text-muted-foreground">{lab.speaker}</div>
+                      <div className="mt-auto pt-3 text-[11px] text-muted-foreground">
+                        Recorded {lab.date}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
             )}
 
             {tab === "guidance" && (
