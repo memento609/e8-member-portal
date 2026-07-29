@@ -21,6 +21,10 @@ import {
   CheckCircle2,
   Search,
   Bell,
+  Compass as CompassIcon,
+  Lightbulb,
+  Link as LinkIcon,
+  Download,
 } from "lucide-react";
 
 export const Route = createFileRoute("/education")({
@@ -260,11 +264,64 @@ function SectionCard({ section }: { section: Section }) {
   );
 }
 
+type Tab = "primer" | "labs" | "guidance" | "resources";
+
+const guidanceItems = [
+  {
+    title: "E8 Investment Thesis & Values",
+    desc: "How we evaluate deals, what we fund, and what we won't.",
+  },
+  {
+    title: "Member Code of Conduct",
+    desc: "Confidentiality, conflicts of interest, and community norms.",
+  },
+  {
+    title: "Diligence Playbook",
+    desc: "Step-by-step guide for leading or joining a diligence team.",
+  },
+  {
+    title: "Deal Memo Template",
+    desc: "The structure we use for pitch summaries and diligence write-ups.",
+  },
+  {
+    title: "Voting & Follow-on Guidelines",
+    desc: "How fund votes work and when we participate in follow-on rounds.",
+  },
+];
+
+const resourceLinks = [
+  {
+    title: "Angel Capital Association",
+    desc: "National trade association for accredited angel investors.",
+    href: "#",
+  },
+  {
+    title: "Holloway Guide to Raising Venture Capital",
+    desc: "Founder-side reference that helps you spot fundraising red flags.",
+    href: "#",
+  },
+  {
+    title: "SAFE Financing Documents (Y Combinator)",
+    desc: "The canonical SAFE templates and post-money primer.",
+    href: "#",
+  },
+  {
+    title: "NVCA Model Legal Documents",
+    desc: "Industry-standard term sheets and definitive agreements.",
+    href: "#",
+  },
+  {
+    title: "Climate Tech VC Newsletter",
+    desc: "Weekly market intel on climate deals, funds, and policy.",
+    href: "#",
+  },
+];
+
 function EducationPage() {
   const [navOpen, setNavOpen] = useState(false);
-  const [tab, setTab] = useState<"labs" | "primer">("labs");
+  const [tab, setTab] = useState<Tab>("primer");
 
-  const sections = tab === "labs" ? learningLabs : primer;
+  const sections = tab === "primer" ? primer : tab === "labs" ? learningLabs : [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -366,43 +423,32 @@ function EducationPage() {
           </header>
 
           <div className="mx-auto max-w-5xl px-4 py-8 lg:px-8">
-            <div className="mb-6 inline-flex rounded-xl border border-border bg-card p-1">
-              <button
-                onClick={() => setTab("labs")}
-                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  tab === "labs"
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Video className="h-4 w-4" />
-                Learning Labs
-              </button>
-              <button
-                onClick={() => setTab("primer")}
-                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  tab === "primer"
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <GraduationCap className="h-4 w-4" />
-                New to Angel Investing
-              </button>
+            <div className="mb-6 inline-flex flex-wrap rounded-xl border border-border bg-card p-1">
+              {(
+                [
+                  { id: "primer", label: "New to Angel Investing", icon: GraduationCap },
+                  { id: "labs", label: "Learning Labs", icon: Video },
+                  { id: "guidance", label: "Guidance", icon: Lightbulb },
+                  { id: "resources", label: "Other Resources", icon: CompassIcon },
+                ] as { id: Tab; label: string; icon: typeof Video }[]
+              ).map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                    tab === t.id
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <t.icon className="h-4 w-4" />
+                  {t.label}
+                </button>
+              ))}
             </div>
 
             <div className="mb-6 rounded-2xl border border-border bg-card p-5">
-              {tab === "labs" ? (
-                <>
-                  <div className="text-sm font-semibold text-foreground">
-                    Learning Labs recordings
-                  </div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Member-only sessions on term sheets, diligence, sector deep-dives, and more.
-                    Expand any session to see its chapters.
-                  </p>
-                </>
-              ) : (
+              {tab === "primer" && (
                 <>
                   <div className="text-sm font-semibold text-foreground">
                     New to Angel Investing
@@ -413,13 +459,99 @@ function EducationPage() {
                   </p>
                 </>
               )}
+              {tab === "labs" && (
+                <>
+                  <div className="text-sm font-semibold text-foreground">
+                    Learning Labs recordings
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Member-only sessions on term sheets, diligence, sector deep-dives, and more.
+                    Expand any session to see its chapters.
+                  </p>
+                </>
+              )}
+              {tab === "guidance" && (
+                <>
+                  <div className="text-sm font-semibold text-foreground">
+                    E8 guidance & playbooks
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Internal frameworks, policies, and templates that define how E8 operates.
+                  </p>
+                </>
+              )}
+              {tab === "resources" && (
+                <>
+                  <div className="text-sm font-semibold text-foreground">Other resources</div>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    External reading, tools, and communities we recommend for angel investors.
+                  </p>
+                </>
+              )}
             </div>
 
-            <div className="space-y-4">
-              {sections.map((s) => (
-                <SectionCard key={s.id} section={s} />
-              ))}
-            </div>
+            {(tab === "primer" || tab === "labs") && (
+              <div className="space-y-4">
+                {sections.map((s) => (
+                  <SectionCard key={s.id} section={s} />
+                ))}
+              </div>
+            )}
+
+            {tab === "guidance" && (
+              <ul className="space-y-3">
+                {guidanceItems.map((g) => (
+                  <li
+                    key={g.title}
+                    className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 transition-colors hover:bg-secondary/40"
+                  >
+                    <div className="flex min-w-0 items-start gap-3">
+                      <div className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
+                        <FileText className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold text-foreground">{g.title}</div>
+                        <div className="text-xs text-muted-foreground">{g.desc}</div>
+                      </div>
+                    </div>
+                    <a
+                      href="#"
+                      className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-primary hover:underline"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      Open
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {tab === "resources" && (
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {resourceLinks.map((r) => (
+                  <li
+                    key={r.title}
+                    className="rounded-2xl border border-border bg-card p-5 transition-colors hover:bg-secondary/40"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
+                        <LinkIcon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold text-foreground">{r.title}</div>
+                        <div className="mt-0.5 text-xs text-muted-foreground">{r.desc}</div>
+                        <a
+                          href={r.href}
+                          className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                        >
+                          Visit <ExternalLink className="h-3 w-3" />
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </main>
       </div>
