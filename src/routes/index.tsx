@@ -508,36 +508,79 @@ function Index() {
                     <div className="flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-chart-1" />
                       <h3 className="font-semibold">Diligence</h3>
-                      <span className="text-xs text-muted-foreground">1 active</span>
+                      <span className="text-xs text-muted-foreground">
+                        {dilIdx + 1} of {dilCount} active
+                      </span>
                     </div>
-                    <a href="#" className="text-xs font-medium text-primary hover:underline">
-                      All deals →
-                    </a>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={prevDil}
+                        aria-label="Previous company"
+                        className="grid h-7 w-7 place-items-center rounded-md border border-border bg-background text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={nextDil}
+                        aria-label="Next company"
+                        className="grid h-7 w-7 place-items-center rounded-md border border-border bg-background text-muted-foreground transition hover:bg-muted hover:text-foreground"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                      <a href="#" className="ml-1 text-xs font-medium text-primary hover:underline">
+                        All →
+                      </a>
+                    </div>
                   </div>
-                  <div className="rounded-xl border border-border bg-background p-4">
+
+                  <div className="relative rounded-xl border border-border bg-background p-4">
+                    {dilCompany.tag && (
+                      <span className="absolute right-3 top-3 text-[10px] font-bold tracking-wide text-muted-foreground">
+                        {dilCompany.tag}
+                      </span>
+                    )}
                     <div className="flex items-start gap-3">
                       <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-muted text-[10px] font-bold">
-                        NALA
+                        {dilCompany.initials}
                       </div>
-                      <div className="min-w-0">
-                        <div className="font-semibold">NALA Membranes</div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <div className="font-semibold">{dilCompany.name}</div>
+                          <StatusBadge status={dilCompany.status} />
+                        </div>
                         <div className="mt-1 text-sm text-muted-foreground">
-                          Commercializing the first new membranes in 40 years to reduce the
-                          cost and climate impact of advanced water treatment.
+                          {dilCompany.blurb}
                         </div>
                         <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
-                          <Chip>AC</Chip>
-                          <Chip>JC</Chip>
-                          <Chip>KG</Chip>
-                          <Chip>SG</Chip>
-                          <Chip>SW</Chip>
-                          <Chip>PA</Chip>
-                          <span className="ml-1">
-                            Arielle Cohen (Lead), Jeff Canin, Kathryn Gardow, Steven Gold…
-                          </span>
+                          {dilCompany.team.length > 0 ? (
+                            <>
+                              {dilCompany.team.map((t) => (
+                                <Chip key={t}>{t}</Chip>
+                              ))}
+                              <span className="ml-1">{dilCompany.teamFull}</span>
+                            </>
+                          ) : (
+                            <span className="italic">{dilCompany.teamFull}</span>
+                          )}
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-center gap-1.5">
+                    {diligenceCompanies.map((c, i) => (
+                      <button
+                        key={c.name}
+                        type="button"
+                        onClick={() => setDilIdx(i)}
+                        aria-label={`Show ${c.name}`}
+                        className={`h-1.5 rounded-full transition-all ${
+                          i === dilIdx ? "w-6 bg-primary" : "w-1.5 bg-border hover:bg-muted-foreground/40"
+                        }`}
+                      />
+                    ))}
                   </div>
                 </Card>
 
