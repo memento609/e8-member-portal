@@ -354,7 +354,7 @@ function EducationPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("primer");
 
-  const sections = tab === "primer" ? primer : tab === "labs" ? learningLabs : [];
+  const sections = tab === "primer" ? primer : [];
 
   return (
     <div className="min-h-screen bg-background">
