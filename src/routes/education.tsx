@@ -315,7 +315,9 @@ function ModuleCard({ module, items }: { module: CurriculumModule; items: MediaI
                 className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
               >
                 <span className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
-                  <HelpCircle className="h-4 w-4 text-primary" />
+                  <span className="grid h-6 w-6 place-items-center rounded-full bg-primary/15 text-primary">
+                    <Lightbulb className="h-3.5 w-3.5" />
+                  </span>
                   Guiding questions ({module.guidingQuestions.length})
                 </span>
                 {questionsOpen ? (
