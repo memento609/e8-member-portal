@@ -339,7 +339,7 @@ function ModuleCard({ module, items }: { module: CurriculumModule; items: MediaI
           {required.length > 0 && (
             <div>
               <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                Required
+                Lessons
               </div>
               <ul className="space-y-2">
                 {required.map((i) => (
