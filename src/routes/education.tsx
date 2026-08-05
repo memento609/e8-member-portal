@@ -24,7 +24,7 @@ import {
   Compass as CompassIcon,
   Lightbulb,
   Clock,
-  HelpCircle,
+  Lightbulb,
   PencilRuler,
 } from "lucide-react";
 import { getCurriculum } from "@/lib/education/curriculum.functions";
