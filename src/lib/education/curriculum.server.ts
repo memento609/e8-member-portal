@@ -143,10 +143,12 @@ export async function loadCurriculum(): Promise<Curriculum> {
       type: r["Type"] ?? "",
       sourcePublisher: r["Source_Publisher"] ?? "",
       length: r["Length"] ?? "",
-      requirement:
+      requirement: (
         (r["Required_or_Supplementary"] ?? "").toLowerCase().startsWith("supp")
           ? "Supplementary"
-          : "Required",
+          : "Required"
+      ) as MediaItem["requirement"],
+
       url: r["URL"] ?? "",
       isExternal: (r["Internal_or_External"] ?? "").toLowerCase() === "external",
       lastVerified: r["Last_Verified"] ?? "",
