@@ -24,7 +24,6 @@ import {
   Compass as CompassIcon,
   Lightbulb,
   Clock,
-  HelpCircle,
   PencilRuler,
 } from "lucide-react";
 import { getCurriculum } from "@/lib/education/curriculum.functions";
@@ -290,8 +289,8 @@ function ModuleCard({ module, items }: { module: CurriculumModule; items: MediaI
             </div>
             <div className="text-base font-semibold text-foreground">{module.title}</div>
             <div className="mt-1 text-xs text-muted-foreground">
-              {required.length} required
-              {supplementary.length > 0 && ` · ${supplementary.length} supplementary`}
+              {required.length} {required.length === 1 ? "lesson" : "lessons"}
+              {supplementary.length > 0 && ` · ${supplementary.length} extra`}
             </div>
           </div>
         </div>
@@ -315,7 +314,9 @@ function ModuleCard({ module, items }: { module: CurriculumModule; items: MediaI
                 className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
               >
                 <span className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
-                  <HelpCircle className="h-4 w-4 text-primary" />
+                  <span className="grid h-6 w-6 place-items-center rounded-full bg-primary/15 text-primary">
+                    <Lightbulb className="h-3.5 w-3.5" />
+                  </span>
                   Guiding questions ({module.guidingQuestions.length})
                 </span>
                 {questionsOpen ? (
@@ -337,7 +338,7 @@ function ModuleCard({ module, items }: { module: CurriculumModule; items: MediaI
           {required.length > 0 && (
             <div>
               <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                Required
+                Lessons
               </div>
               <ul className="space-y-2">
                 {required.map((i) => (
