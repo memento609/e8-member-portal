@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import {
   Menu,
   X,
@@ -18,14 +19,22 @@ import {
   FileText,
   BookOpen,
   ExternalLink,
-  CheckCircle2,
   Search,
   Bell,
   Compass as CompassIcon,
   Lightbulb,
-  Link as LinkIcon,
-  Download,
+  Clock,
+  HelpCircle,
+  PencilRuler,
 } from "lucide-react";
+import { getCurriculum } from "@/lib/education/curriculum.functions";
+import type { CurriculumModule, MediaItem } from "@/lib/education/curriculum.server";
+
+const curriculumQuery = queryOptions({
+  queryKey: ["curriculum"],
+  queryFn: () => getCurriculum(),
+  staleTime: 5 * 60_000,
+});
 
 export const Route = createFileRoute("/education")({
   head: () => ({
@@ -34,17 +43,29 @@ export const Route = createFileRoute("/education")({
       {
         name: "description",
         content:
-          "Learning Labs recordings and New to Angel Investing materials for E8 members.",
+          "New to Angel Investing modules, Learning Labs recordings, and guidance for E8 members.",
       },
       { property: "og:title", content: "Investor Education — E8 Portal" },
       {
         property: "og:description",
         content:
-          "Curated video recordings and primers to sharpen your angel investing craft.",
+          "Curated modules, readings, and recordings to sharpen your angel investing craft.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(curriculumQuery),
   component: EducationPage,
+  errorComponent: ({ error }) => (
+    <div className="grid min-h-screen place-items-center bg-background px-4">
+      <div className="max-w-md text-center">
+        <h1 className="text-lg font-semibold">Education content didn't load</h1>
+        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+      </div>
+    </div>
+  ),
+  notFoundComponent: () => <div className="p-8">No education content found.</div>,
 });
 
 const nav: { label: string; icon: typeof HomeIcon; to?: string; active?: boolean }[] = [
@@ -58,22 +79,6 @@ const nav: { label: string; icon: typeof HomeIcon; to?: string; active?: boolean
   { label: "Member Directory", icon: Users },
   { label: "Explore", icon: Compass },
 ];
-
-type Item = {
-  title: string;
-  duration: string;
-  kind: "video" | "doc" | "reading";
-  done?: boolean;
-};
-
-type Section = {
-  id: string;
-  eyebrow: string;
-  title: string;
-  meta: string;
-  resourcesUrl?: string;
-  items: Item[];
-};
 
 type Lab = {
   id: string;
@@ -151,205 +156,7 @@ const learningLabs: Lab[] = [
   },
 ];
 
-const primer: Section[] = [
-  {
-    id: "p-1",
-    eyebrow: "Week 1",
-    title: "What Angel Investing Actually Is",
-    meta: "Unlocked 11 Feb 2026 · ~90 mins",
-    resourcesUrl: "#",
-    items: [
-      { title: "Orientation", duration: "10 mins", kind: "reading", done: true },
-      { title: "Accredited investor rules", duration: "15 mins", kind: "reading", done: true },
-      { title: "Where angels fit in the stack", duration: "20 mins", kind: "video" },
-      { title: "Portfolio math & the power law", duration: "25 mins", kind: "video" },
-      { title: "Your toolkit", duration: "20 mins", kind: "doc" },
-    ],
-  },
-  {
-    id: "p-2",
-    eyebrow: "Week 2",
-    title: "Sourcing & Screening Deals",
-    meta: "Unlocked 18 Feb 2026 · ~85 mins",
-    resourcesUrl: "#",
-    items: [
-      { title: "Where deals come from", duration: "15 mins", kind: "video" },
-      { title: "First-pass screening rubric", duration: "20 mins", kind: "doc" },
-      { title: "Founder red flags", duration: "20 mins", kind: "video" },
-      { title: "Practice: score 3 pitches", duration: "30 mins", kind: "reading" },
-    ],
-  },
-  {
-    id: "p-3",
-    eyebrow: "Week 3",
-    title: "Diligence Basics",
-    meta: "Unlocked 25 Feb 2026 · ~95 mins",
-    resourcesUrl: "#",
-    items: [
-      { title: "Anatomy of a diligence memo", duration: "18 mins", kind: "doc" },
-      { title: "Reference calls that work", duration: "20 mins", kind: "video" },
-      { title: "Reading a cap table", duration: "22 mins", kind: "video" },
-      { title: "Financial model sanity checks", duration: "35 mins", kind: "reading" },
-    ],
-  },
-  {
-    id: "p-4",
-    eyebrow: "Week 4",
-    title: "Writing the Check & After",
-    meta: "Unlocked 04 Mar 2026 · ~80 mins",
-    resourcesUrl: "#",
-    items: [
-      { title: "Closing mechanics", duration: "15 mins", kind: "video" },
-      { title: "Tracking your portfolio", duration: "20 mins", kind: "doc" },
-      { title: "How to actually help founders", duration: "25 mins", kind: "video" },
-      { title: "When things go sideways", duration: "20 mins", kind: "video" },
-    ],
-  },
-];
-
-function kindIcon(kind: Item["kind"]) {
-  if (kind === "video") return PlayCircle;
-  if (kind === "doc") return FileText;
-  return BookOpen;
-}
-
-function SectionCard({ section }: { section: Section }) {
-  const [open, setOpen] = useState(true);
-  const completed = section.items.filter((i) => i.done).length;
-  return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-start justify-between gap-4 bg-secondary/40 px-5 py-4 text-left transition-colors hover:bg-secondary/60"
-      >
-        <div className="flex items-start gap-3">
-          <div className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
-            {completed === section.items.length ? (
-              <CheckCircle2 className="h-4 w-4" />
-            ) : (
-              <span className="text-[11px] font-semibold">
-                {completed}/{section.items.length}
-              </span>
-            )}
-          </div>
-          <div>
-            <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-              {section.eyebrow}
-            </div>
-            <div className="text-base font-semibold text-foreground">{section.title}</div>
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-              <span>{section.meta}</span>
-              {section.resourcesUrl && (
-                <a
-                  href={section.resourcesUrl}
-                  onClick={(e) => e.stopPropagation()}
-                  className="inline-flex items-center gap-1 text-primary hover:underline"
-                >
-                  Resources <ExternalLink className="h-3 w-3" />
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-        {open ? (
-          <ChevronUp className="mt-1 h-5 w-5 text-muted-foreground" />
-        ) : (
-          <ChevronDown className="mt-1 h-5 w-5 text-muted-foreground" />
-        )}
-      </button>
-
-      {open && (
-        <ul className="space-y-2 p-4">
-          {section.items.map((item) => {
-            const Icon = kindIcon(item.kind);
-            return (
-              <li
-                key={item.title}
-                className="flex items-center justify-between gap-3 rounded-xl bg-secondary/30 px-4 py-3 transition-colors hover:bg-secondary/60"
-              >
-                <div className="flex min-w-0 items-center gap-3">
-                  <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold text-foreground">
-                      {item.title}
-                    </div>
-                    <div className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                      {item.kind === "video"
-                        ? "Recording"
-                        : item.kind === "doc"
-                          ? "Worksheet"
-                          : "Reading"}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
-                  {item.done && <CheckCircle2 className="h-4 w-4 text-primary" />}
-                  <span>{item.duration}</span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
-  );
-}
-
 type Tab = "primer" | "labs" | "guidance" | "resources";
-
-const guidanceItems = [
-  {
-    title: "E8 Investment Thesis & Values",
-    desc: "How we evaluate deals, what we fund, and what we won't.",
-  },
-  {
-    title: "Member Code of Conduct",
-    desc: "Confidentiality, conflicts of interest, and community norms.",
-  },
-  {
-    title: "Diligence Playbook",
-    desc: "Step-by-step guide for leading or joining a diligence team.",
-  },
-  {
-    title: "Deal Memo Template",
-    desc: "The structure we use for pitch summaries and diligence write-ups.",
-  },
-  {
-    title: "Voting & Follow-on Guidelines",
-    desc: "How fund votes work and when we participate in follow-on rounds.",
-  },
-];
-
-const resourceLinks = [
-  {
-    title: "Angel Capital Association",
-    desc: "National trade association for accredited angel investors.",
-    href: "#",
-  },
-  {
-    title: "Holloway Guide to Raising Venture Capital",
-    desc: "Founder-side reference that helps you spot fundraising red flags.",
-    href: "#",
-  },
-  {
-    title: "SAFE Financing Documents (Y Combinator)",
-    desc: "The canonical SAFE templates and post-money primer.",
-    href: "#",
-  },
-  {
-    title: "NVCA Model Legal Documents",
-    desc: "Industry-standard term sheets and definitive agreements.",
-    href: "#",
-  },
-  {
-    title: "Climate Tech VC Newsletter",
-    desc: "Weekly market intel on climate deals, funds, and policy.",
-    href: "#",
-  },
-];
-
 type LabSort = "newest" | "oldest" | "shortest" | "longest";
 
 function parseLabDate(d: string) {
@@ -360,12 +167,235 @@ function parseDurationMins(d: string) {
   return m ? parseInt(m[0], 10) : 0;
 }
 
+function typeIcon(type: string) {
+  const t = type.toLowerCase();
+  if (t.includes("video")) return PlayCircle;
+  if (t.includes("worksheet")) return PencilRuler;
+  if (t.includes("doc")) return FileText;
+  return BookOpen;
+}
+
+function youTubeId(url: string): string | null {
+  const watch = url.match(/[?&]v=([\w-]{6,})/);
+  if (watch) return watch[1];
+  const short = url.match(/youtu\.be\/([\w-]{6,})/);
+  if (short) return short[1];
+  const embed = url.match(/youtube\.com\/embed\/([\w-]{6,})/);
+  if (embed) return embed[1];
+  return null;
+}
+
+function MediaCard({ item }: { item: MediaItem }) {
+  const [playing, setPlaying] = useState(false);
+  const Icon = typeIcon(item.type);
+  const ytId = item.url ? youTubeId(item.url) : null;
+  const unavailable = !item.url;
+
+  return (
+    <li className="rounded-xl border border-border bg-secondary/25 px-4 py-3">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
+            <Icon className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-sm font-semibold leading-snug text-foreground">
+              {item.title}
+            </div>
+            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-muted-foreground">
+              {item.type && (
+                <span className="rounded-md bg-primary/10 px-1.5 py-0.5 font-semibold uppercase tracking-wide text-primary">
+                  {item.type}
+                </span>
+              )}
+              {item.sourcePublisher && <span>{item.sourcePublisher}</span>}
+              {item.length && (
+                <span className="inline-flex items-center gap-1">
+                  <Clock className="h-3 w-3" />
+                  {item.length}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="shrink-0 text-xs">
+          {unavailable ? (
+            <span className="rounded-md bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+              Coming soon
+            </span>
+          ) : ytId ? (
+            <button
+              onClick={() => setPlaying((v) => !v)}
+              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+            >
+              {playing ? "Hide" : "Watch"} <PlayCircle className="h-3.5 w-3.5" />
+            </button>
+          ) : item.isExternal ? (
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+            >
+              External <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          ) : (
+            <a
+              href={item.url}
+              className="inline-flex items-center gap-1 font-medium text-primary hover:underline"
+            >
+              Open
+            </a>
+          )}
+        </div>
+      </div>
+
+      {ytId && playing && (
+        <div className="mt-3 aspect-video w-full overflow-hidden rounded-lg border border-border">
+          <iframe
+            className="h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${ytId}`}
+            title={item.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
+    </li>
+  );
+}
+
+function ModuleCard({ module, items }: { module: CurriculumModule; items: MediaItem[] }) {
+  const [open, setOpen] = useState(true);
+  const [questionsOpen, setQuestionsOpen] = useState(false);
+  const [suppOpen, setSuppOpen] = useState(false);
+
+  const required = items.filter((i) => i.requirement === "Required");
+  const supplementary = items.filter((i) => i.requirement === "Supplementary");
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-start justify-between gap-4 bg-secondary/40 px-5 py-4 text-left transition-colors hover:bg-secondary/60"
+      >
+        <div className="flex items-start gap-3">
+          <div className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/15 text-sm font-semibold text-primary">
+            {module.moduleNumber}
+          </div>
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              Module {module.moduleNumber}
+            </div>
+            <div className="text-base font-semibold text-foreground">{module.title}</div>
+            <div className="mt-1 text-xs text-muted-foreground">
+              {required.length} required
+              {supplementary.length > 0 && ` · ${supplementary.length} supplementary`}
+            </div>
+          </div>
+        </div>
+        {open ? (
+          <ChevronUp className="mt-1 h-5 w-5 shrink-0 text-muted-foreground" />
+        ) : (
+          <ChevronDown className="mt-1 h-5 w-5 shrink-0 text-muted-foreground" />
+        )}
+      </button>
+
+      {open && (
+        <div className="space-y-4 p-5">
+          {module.summary && (
+            <p className="text-sm leading-relaxed text-muted-foreground">{module.summary}</p>
+          )}
+
+          {module.guidingQuestions.length > 0 && (
+            <div className="rounded-xl border border-border bg-secondary/25">
+              <button
+                onClick={() => setQuestionsOpen((v) => !v)}
+                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
+              >
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+                  <HelpCircle className="h-4 w-4 text-primary" />
+                  Guiding questions ({module.guidingQuestions.length})
+                </span>
+                {questionsOpen ? (
+                  <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                ) : (
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                )}
+              </button>
+              {questionsOpen && (
+                <ul className="list-disc space-y-1.5 px-9 pb-4 text-sm text-muted-foreground">
+                  {module.guidingQuestions.map((q) => (
+                    <li key={q}>{q}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+
+          {required.length > 0 && (
+            <div>
+              <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                Required
+              </div>
+              <ul className="space-y-2">
+                {required.map((i) => (
+                  <MediaCard key={i.mediaId} item={i} />
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {supplementary.length > 0 && (
+            <div>
+              <button
+                onClick={() => setSuppOpen((v) => !v)}
+                className="mb-2 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground hover:text-foreground"
+              >
+                Supplementary ({supplementary.length})
+                {suppOpen ? (
+                  <ChevronUp className="h-3.5 w-3.5" />
+                ) : (
+                  <ChevronDown className="h-3.5 w-3.5" />
+                )}
+              </button>
+              {suppOpen && (
+                <ul className="space-y-2">
+                  {supplementary.map((i) => (
+                    <MediaCard key={i.mediaId} item={i} />
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ComingSoon({ label }: { label: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-border bg-card px-6 py-12 text-center">
+      <div className="text-sm font-semibold text-foreground">{label} — coming soon</div>
+      <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+        Content for this section is being assembled. It will appear here as soon as the content
+        team adds it to the education sheet.
+      </p>
+    </div>
+  );
+}
+
 function EducationPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("primer");
   const [labSort, setLabSort] = useState<LabSort>("newest");
+  const { data } = useSuspenseQuery(curriculumQuery);
 
-  const sections = tab === "primer" ? primer : [];
+  const primerModules = data.modules.filter(
+    (m) => m.section.toLowerCase() === "new to angel investing",
+  );
 
   const sortedLabs = [...learningLabs].sort((a, b) => {
     switch (labSort) {
@@ -391,7 +421,7 @@ function EducationPage() {
           <div className="flex h-full flex-col">
             <div className="flex items-center justify-between px-4 py-4">
               <div className="flex items-center gap-2">
-                <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-bold">
+                <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary font-bold text-primary-foreground">
                   E8
                 </div>
                 <div className="font-semibold">E8 Portal</div>
@@ -474,7 +504,7 @@ function EducationPage() {
             <div className="flex-1">
               <h1 className="text-lg font-semibold">Investor Education</h1>
               <p className="text-xs text-muted-foreground">
-                Sharpen your craft: recordings from Learning Labs and primers for new angels.
+                Modules, readings, and recordings for E8 members.
               </p>
             </div>
           </header>
@@ -504,59 +534,40 @@ function EducationPage() {
               ))}
             </div>
 
-            <div className="mb-6 rounded-2xl border border-border bg-card p-5">
-              {tab === "primer" && (
-                <>
+            {tab === "primer" && (
+              <>
+                <div className="mb-6 rounded-2xl border border-border bg-card p-5">
                   <div className="text-sm font-semibold text-foreground">
                     New to Angel Investing
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    A four-week primer for members writing their first checks. Work through the
-                    weeks in order or jump to a topic.
+                    {primerModules.length} modules covering the fundamentals. Everything is open —
+                    work through them in order or jump to what you need.
                   </p>
-                </>
-              )}
-              {tab === "labs" && (
-                <>
+                </div>
+                <div className="space-y-4">
+                  {primerModules.map((m) => (
+                    <ModuleCard
+                      key={m.moduleId}
+                      module={m}
+                      items={data.mediaItems.filter((i) => i.moduleId === m.moduleId)}
+                    />
+                  ))}
+                  {primerModules.length === 0 && <ComingSoon label="New to Angel Investing" />}
+                </div>
+              </>
+            )}
+
+            {tab === "labs" && (
+              <>
+                <div className="mb-6 rounded-2xl border border-border bg-card p-5">
                   <div className="text-sm font-semibold text-foreground">
                     Learning Labs recordings
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">
                     Member-only sessions on term sheets, diligence, sector deep-dives, and more.
-                    Expand any session to see its chapters.
                   </p>
-                </>
-              )}
-              {tab === "guidance" && (
-                <>
-                  <div className="text-sm font-semibold text-foreground">
-                    E8 guidance & playbooks
-                  </div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Internal frameworks, policies, and templates that define how E8 operates.
-                  </p>
-                </>
-              )}
-              {tab === "resources" && (
-                <>
-                  <div className="text-sm font-semibold text-foreground">Other resources</div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    External reading, tools, and communities we recommend for angel investors.
-                  </p>
-                </>
-              )}
-            </div>
-
-            {tab === "primer" && (
-              <div className="space-y-4">
-                {sections.map((s) => (
-                  <SectionCard key={s.id} section={s} />
-                ))}
-              </div>
-            )}
-
-            {tab === "labs" && (
-              <>
+                </div>
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                   <div className="text-xs text-muted-foreground">
                     {sortedLabs.length} recordings
@@ -615,60 +626,13 @@ function EducationPage() {
               </>
             )}
 
-            {tab === "guidance" && (
-              <ul className="space-y-3">
-                {guidanceItems.map((g) => (
-                  <li
-                    key={g.title}
-                    className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-card px-5 py-4 transition-colors hover:bg-secondary/40"
-                  >
-                    <div className="flex min-w-0 items-start gap-3">
-                      <div className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
-                        <FileText className="h-4 w-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold text-foreground">{g.title}</div>
-                        <div className="text-xs text-muted-foreground">{g.desc}</div>
-                      </div>
-                    </div>
-                    <a
-                      href="#"
-                      className="inline-flex shrink-0 items-center gap-1 text-xs font-medium text-primary hover:underline"
-                    >
-                      <Download className="h-3.5 w-3.5" />
-                      Open
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
+            {tab === "guidance" && <ComingSoon label="Guidance" />}
+            {tab === "resources" && <ComingSoon label="Other Resources" />}
 
-            {tab === "resources" && (
-              <ul className="grid gap-3 sm:grid-cols-2">
-                {resourceLinks.map((r) => (
-                  <li
-                    key={r.title}
-                    className="rounded-2xl border border-border bg-card p-5 transition-colors hover:bg-secondary/40"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
-                        <LinkIcon className="h-4 w-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold text-foreground">{r.title}</div>
-                        <div className="mt-0.5 text-xs text-muted-foreground">{r.desc}</div>
-                        <a
-                          href={r.href}
-                          className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                        >
-                          Visit <ExternalLink className="h-3 w-3" />
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <p className="mt-10 border-t border-border pt-4 text-xs text-muted-foreground">
+              E8 links to external sources for educational content; we don't host or claim rights
+              to third-party material.
+            </p>
           </div>
         </main>
       </div>
