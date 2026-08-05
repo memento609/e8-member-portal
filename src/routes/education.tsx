@@ -290,8 +290,8 @@ function ModuleCard({ module, items }: { module: CurriculumModule; items: MediaI
             </div>
             <div className="text-base font-semibold text-foreground">{module.title}</div>
             <div className="mt-1 text-xs text-muted-foreground">
-              {required.length} required
-              {supplementary.length > 0 && ` · ${supplementary.length} supplementary`}
+              {required.length} {required.length === 1 ? "lesson" : "lessons"}
+              {supplementary.length > 0 && ` · ${supplementary.length} extra`}
             </div>
           </div>
         </div>
