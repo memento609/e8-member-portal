@@ -17,7 +17,7 @@ import {
   ChevronRight,
   ChevronLeft,
   Bell,
-  Sparkles,
+  
   GraduationCap,
 } from "lucide-react";
 import { PipelineSection } from "@/components/pipeline";
@@ -344,11 +344,26 @@ function Index() {
                 <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight sm:text-3xl">
                   Good afternoon, Nami.
                 </h1>
-                <div className="mt-1 hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
-                  <Sparkles className="h-3.5 w-3.5" />
-                  Reworked wireframe
+                <div className="mt-3 flex items-start gap-3 rounded-2xl border border-accent/40 bg-accent/15 p-3 shadow-sm md:p-4">
+                  <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/40 text-accent-foreground">
+                    <Bell className="h-3.5 w-3.5" />
+                  </span>
+                  <div className="min-w-0">
+                    <h2 className="text-sm font-semibold tracking-tight">Alerts</h2>
+                    <ul className="mt-1 space-y-1">
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                        <span>
+                          Update your{" "}
+                          <span className="font-medium text-foreground">Decarbon8 ratings</span> by
+                          7:30 am PT, July 27 (Mon)
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
+
 
               {/* Member Profile — top-right corner */}
               <div className="w-full rounded-2xl border border-border bg-card p-4 shadow-sm md:w-[360px]">
@@ -385,26 +400,6 @@ function Index() {
               </div>
             </header>
 
-            <section className="mb-4">
-              <div className="flex items-start gap-3 rounded-2xl border border-accent/40 bg-accent/15 p-3 shadow-sm md:p-4">
-                <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/40 text-accent-foreground">
-                  <Bell className="h-3.5 w-3.5" />
-                </span>
-                <div className="min-w-0">
-                  <h2 className="text-sm font-semibold tracking-tight">Alerts</h2>
-                  <ul className="mt-1 space-y-1">
-                    <li className="flex items-start gap-2 text-xs text-muted-foreground">
-                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                      <span>
-                        Update your{" "}
-                        <span className="font-medium text-foreground">Decarbon8 ratings</span> by
-                        7:30 am PT, July 27 (Mon)
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </section>
 
             <section className="mb-6 space-y-3">
               <PipelineSection />
