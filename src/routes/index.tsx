@@ -55,23 +55,6 @@ const nav: { label: string; icon: typeof HomeIcon; active?: boolean; to?: string
   { label: "Explore", icon: Compass },
 ];
 
-const mainStages = [
-  { name: "pre-screening", count: 12 },
-  { name: "screening", count: 4 },
-  { name: "pitch", count: 3 },
-  { name: "follow-up", count: 2 },
-  { name: "diligence", count: 2 },
-  { name: "debrief", count: 1 },
-];
-const forkStages = [
-  { name: "direct invest", count: 1 },
-  { name: "fund vote", count: 1 },
-];
-const followOnStages = [
-  { name: "diligence", count: 3 },
-  { name: "debrief", count: 2 },
-  { name: "investment ready", count: 1 },
-];
 // Combined view: one set of stages, two deal types per stage.
 const combinedStages: { name: string; newCount: number | null; followCount: number | null }[] = [
   { name: "pre-screening", newCount: 12, followCount: null },
