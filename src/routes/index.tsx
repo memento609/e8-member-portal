@@ -445,7 +445,6 @@ function Index() {
                 <Card>
                   <div className="mb-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-chart-1" />
                       <h3 className="font-semibold">Diligence</h3>
                       <span className="text-xs text-muted-foreground">
                         {dilIdx + 1} of {dilCount} active
