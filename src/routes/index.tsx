@@ -19,9 +19,6 @@ import {
   Bell,
   Sparkles,
   GraduationCap,
-  RefreshCw,
-  Plus,
-  Leaf,
 } from "lucide-react";
 import { PipelineSection } from "@/components/pipeline";
 
