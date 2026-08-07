@@ -21,6 +21,7 @@ import {
   GraduationCap,
   RefreshCw,
   Plus,
+  Leaf,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -55,25 +56,51 @@ const nav: { label: string; icon: typeof HomeIcon; active?: boolean; to?: string
   { label: "Explore", icon: Compass },
 ];
 
-// Combined view: one set of stages, two deal types per stage.
-const combinedStages: { name: string; newCount: number | null; followCount: number | null }[] = [
-  { name: "pre-screening", newCount: 12, followCount: null },
-  { name: "screening", newCount: 4, followCount: null },
-  { name: "pitch", newCount: 3, followCount: null },
-  { name: "follow-up", newCount: 2, followCount: null },
-  { name: "diligence", newCount: 2, followCount: 3 },
-  { name: "debrief", newCount: 1, followCount: 2 },
+// Combined view: one set of stages, three deal types per stage.
+type DealType = "new" | "follow" | "d8";
+type Counts = Partial<Record<DealType, number | null>>;
+
+const dealStyles: Record<
+  DealType,
+  { label: string; badge: string; chip: string; bar: string; text: string }
+> = {
+  new: {
+    label: "New",
+    badge: "bg-primary text-primary-foreground",
+    chip: "bg-primary/10 text-primary",
+    bar: "bg-primary",
+    text: "text-primary",
+  },
+  follow: {
+    label: "Follow-on",
+    badge: "border border-accent bg-accent/20 text-accent-foreground",
+    chip: "bg-accent/25 text-accent-foreground",
+    bar: "bg-accent",
+    text: "text-accent-foreground",
+  },
+  d8: {
+    label: "Decarbon8",
+    badge: "border border-chart-3 bg-chart-3/15 text-chart-3",
+    chip: "bg-chart-3/15 text-chart-3",
+    bar: "bg-chart-3",
+    text: "text-chart-3",
+  },
+};
+
+const combinedStages: { name: string; counts: Counts }[] = [
+  { name: "pre-screening", counts: { new: 12 } },
+  { name: "screening", counts: { new: 4, d8: 6 } },
+  { name: "pitch", counts: { new: 3 } },
+  { name: "follow-up", counts: { new: 2 } },
+  { name: "diligence", counts: { new: 2, follow: 3 } },
+  { name: "debrief", counts: { new: 1, follow: 2, d8: 3 } },
 ];
-const combinedForkStages: { name: string; count: number; type: "new" | "follow" }[] = [
-  { name: "direct invest", count: 1, type: "new" },
-  { name: "fund vote", count: 1, type: "new" },
-  { name: "investment ready", count: 1, type: "follow" },
+const combinedForkStages: { name: string; counts: Counts }[] = [
+  { name: "direct invest", counts: { new: 1 } },
+  { name: "fund vote", counts: { new: 1 } },
+  { name: "investment ready", counts: { follow: 1, d8: null } },
 ];
-const decarbonStages = [
-  { name: "screening committee", count: 6 },
-  { name: "sept. presentation", count: 3 },
-  { name: "co-invest / donate", count: null as number | null },
-];
+
 
 type DiligenceStatus = "Team forming" | "Ongoing" | "Review";
 const diligenceCompanies: {
@@ -404,23 +431,21 @@ function Index() {
                   <h2 className="text-sm font-semibold tracking-tight">
                     Deal pipeline{" "}
                     <span className="font-normal text-muted-foreground">
-                      (Direct + Fund, incl. portfolio follow-ons)
+                      (all programs)
                     </span>
                   </h2>
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <span className="grid h-3.5 w-3.5 place-items-center rounded-[4px] bg-primary text-primary-foreground">
-                          <Plus className="h-2.5 w-2.5" />
+                      {(["new", "follow", "d8"] as DealType[]).map((t) => (
+                        <span key={t} className="flex items-center gap-1">
+                          <span
+                            className={`grid h-3.5 w-3.5 place-items-center rounded-[4px] ${dealStyles[t].badge}`}
+                          >
+                            {dealTypeIcon(t, "h-2.5 w-2.5")}
+                          </span>
+                          {dealStyles[t].label}
                         </span>
-                        New
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <span className="grid h-3.5 w-3.5 place-items-center rounded-[4px] border border-accent bg-accent/15 text-accent">
-                          <RefreshCw className="h-2.5 w-2.5" />
-                        </span>
-                        Follow-on
-                      </span>
+                      ))}
                     </div>
                     <a
                       href="#"
@@ -434,12 +459,7 @@ function Index() {
                 <div className="flex gap-2 overflow-x-auto pb-1">
                   <div className="flex min-w-0 flex-1 gap-2">
                     {combinedStages.map((s) => (
-                      <SplitStageCard
-                        key={s.name}
-                        name={s.name}
-                        newCount={s.newCount}
-                        followCount={s.followCount}
-                      />
+                      <SplitStageCard key={s.name} name={s.name} counts={s.counts} />
                     ))}
                   </div>
                   <div className="mx-0.5 hidden border-l border-dashed border-border md:block" />
@@ -447,21 +467,16 @@ function Index() {
                     {combinedForkStages.map((s) => (
                       <div
                         key={s.name}
-                        className={`flex min-w-[112px] items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 ${
-                          s.type === "follow"
-                            ? "border-accent/50 bg-accent/10"
-                            : "border-border bg-background"
-                        }`}
+                        className="flex min-w-[150px] items-center justify-between gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5"
                       >
-                        <span className="flex items-center gap-1.5 text-[11px] font-medium leading-tight text-muted-foreground">
-                          {s.type === "follow" ? (
-                            <RefreshCw className="h-3 w-3 text-accent" />
-                          ) : (
-                            <Plus className="h-3 w-3 text-primary" />
-                          )}
+                        <span className="text-[11px] font-medium leading-tight text-muted-foreground">
                           {s.name}
                         </span>
-                        <span className="text-sm font-semibold leading-none">{s.count}</span>
+                        <span className="flex items-center gap-1">
+                          {(Object.keys(s.counts) as DealType[]).map((t) => (
+                            <CountChip key={t} type={t} value={s.counts[t]} />
+                          ))}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -472,22 +487,7 @@ function Index() {
               </div>
 
 
-              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm md:p-4">
-                <div className="mb-2 flex items-center justify-between">
-                  <h2 className="text-sm font-semibold tracking-tight">Decarbon8</h2>
-                  <a
-                    href="#"
-                    className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                  >
-                    view full pipeline <ArrowRight className="h-3 w-3" />
-                  </a>
-                </div>
-                <div className="grid gap-2 sm:grid-cols-3">
-                  {decarbonStages.map((s) => (
-                    <StageCard key={s.name} name={s.name} count={s.count} />
-                  ))}
-                </div>
-              </div>
+
             </section>
 
             {/* Three-column organization */}
@@ -780,64 +780,51 @@ function StatusBadge({ status }: { status: DiligenceStatus }) {
 }
 
 
-function SplitStageCard({
-  name,
-  newCount,
-  followCount,
-}: {
-  name: string;
-  newCount: number | null;
-  followCount: number | null;
-}) {
-  const total = (newCount ?? 0) + (followCount ?? 0);
-  const newPct = total ? ((newCount ?? 0) / total) * 100 : 100;
+function dealTypeIcon(type: DealType, cls: string) {
+  if (type === "new") return <Plus className={cls} />;
+  if (type === "follow") return <RefreshCw className={cls} />;
+  return <Leaf className={cls} />;
+}
+
+function CountChip({ type, value }: { type: DealType; value: number | null | undefined }) {
+  const s = dealStyles[type];
   return (
-    <div className="flex min-w-[104px] flex-1 flex-col rounded-lg border border-border bg-background px-2.5 py-2">
+    <span
+      className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-sm font-semibold leading-none ${s.chip}`}
+      title={s.label}
+    >
+      {dealTypeIcon(type, "h-3 w-3")}
+      {value === null || value === undefined ? "—" : value}
+    </span>
+  );
+}
+
+function SplitStageCard({ name, counts }: { name: string; counts: Counts }) {
+  const types = (Object.keys(counts) as DealType[]).filter((t) => counts[t] !== undefined);
+  const total = types.reduce((sum, t) => sum + (counts[t] ?? 0), 0);
+  return (
+    <div className="flex min-w-[112px] flex-1 flex-col rounded-lg border border-border bg-background px-2.5 py-2">
       <div className="text-[11px] font-medium leading-tight text-muted-foreground">{name}</div>
-      <div className="mt-1 flex items-end gap-2">
-        <span className="flex items-center gap-1 text-lg font-semibold leading-none tracking-tight">
-          <Plus className="h-3 w-3 text-primary" />
-          {newCount ?? 0}
-        </span>
-        {followCount ? (
-          <span className="flex items-center gap-1 rounded-md bg-accent/15 px-1.5 py-0.5 text-sm font-semibold leading-none text-accent">
-            <RefreshCw className="h-3 w-3" />
-            {followCount}
-          </span>
-        ) : null}
+      <div className="mt-1 flex flex-wrap items-center gap-1">
+        {types.map((t) => (
+          <CountChip key={t} type={t} value={counts[t]} />
+        ))}
       </div>
-      <div className="mt-1.5 flex h-1 overflow-hidden rounded-full bg-muted">
-        <div className="h-full bg-primary" style={{ width: `${newPct}%` }} />
-        <div className="h-full bg-accent" style={{ width: `${100 - newPct}%` }} />
+      <div className="mt-1.5 flex h-1 gap-px overflow-hidden rounded-full bg-muted">
+        {total > 0 &&
+          types.map((t) => (
+            <div
+              key={t}
+              className={`h-full ${dealStyles[t].bar}`}
+              style={{ width: `${((counts[t] ?? 0) / total) * 100}%` }}
+            />
+          ))}
       </div>
     </div>
   );
 }
 
-function StageCard({
-  name,
-  count,
-  compact,
-  accent,
-}: {
-  name: string;
-  count: number | null;
-  compact?: boolean;
-  accent?: boolean;
-}) {
-  return (
-    <div
-      className={`flex min-w-[88px] flex-1 flex-col justify-between rounded-lg border border-border bg-background ${
-        compact ? "px-2.5 py-1.5" : "px-3 py-2"
-      } ${accent ? "ring-1 ring-accent/40" : ""}`}
-    >
-      <div className="text-[11px] font-medium leading-tight text-muted-foreground">{name}</div>
-      <div className="mt-0.5 text-lg font-semibold leading-tight tracking-tight">
-        {count === null ? "—" : count}
-      </div>
-    </div>
-  );
-}
+
 
 function VoteBar({
   label,
