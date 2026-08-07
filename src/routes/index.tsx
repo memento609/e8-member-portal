@@ -404,23 +404,21 @@ function Index() {
                   <h2 className="text-sm font-semibold tracking-tight">
                     Deal pipeline{" "}
                     <span className="font-normal text-muted-foreground">
-                      (Direct + Fund, incl. portfolio follow-ons)
+                      (all programs)
                     </span>
                   </h2>
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-3">
                     <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <span className="grid h-3.5 w-3.5 place-items-center rounded-[4px] bg-primary text-primary-foreground">
-                          <Plus className="h-2.5 w-2.5" />
+                      {(["new", "follow", "d8"] as DealType[]).map((t) => (
+                        <span key={t} className="flex items-center gap-1">
+                          <span
+                            className={`grid h-3.5 w-3.5 place-items-center rounded-[4px] ${dealStyles[t].badge}`}
+                          >
+                            {dealTypeIcon(t, "h-2.5 w-2.5")}
+                          </span>
+                          {dealStyles[t].label}
                         </span>
-                        New
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <span className="grid h-3.5 w-3.5 place-items-center rounded-[4px] border border-accent bg-accent/15 text-accent">
-                          <RefreshCw className="h-2.5 w-2.5" />
-                        </span>
-                        Follow-on
-                      </span>
+                      ))}
                     </div>
                     <a
                       href="#"
@@ -434,12 +432,7 @@ function Index() {
                 <div className="flex gap-2 overflow-x-auto pb-1">
                   <div className="flex min-w-0 flex-1 gap-2">
                     {combinedStages.map((s) => (
-                      <SplitStageCard
-                        key={s.name}
-                        name={s.name}
-                        newCount={s.newCount}
-                        followCount={s.followCount}
-                      />
+                      <SplitStageCard key={s.name} name={s.name} counts={s.counts} />
                     ))}
                   </div>
                   <div className="mx-0.5 hidden border-l border-dashed border-border md:block" />
@@ -447,21 +440,16 @@ function Index() {
                     {combinedForkStages.map((s) => (
                       <div
                         key={s.name}
-                        className={`flex min-w-[112px] items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 ${
-                          s.type === "follow"
-                            ? "border-accent/50 bg-accent/10"
-                            : "border-border bg-background"
-                        }`}
+                        className="flex min-w-[150px] items-center justify-between gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5"
                       >
-                        <span className="flex items-center gap-1.5 text-[11px] font-medium leading-tight text-muted-foreground">
-                          {s.type === "follow" ? (
-                            <RefreshCw className="h-3 w-3 text-accent" />
-                          ) : (
-                            <Plus className="h-3 w-3 text-primary" />
-                          )}
+                        <span className="text-[11px] font-medium leading-tight text-muted-foreground">
                           {s.name}
                         </span>
-                        <span className="text-sm font-semibold leading-none">{s.count}</span>
+                        <span className="flex items-center gap-1">
+                          {(Object.keys(s.counts) as DealType[]).map((t) => (
+                            <CountChip key={t} type={t} value={s.counts[t]} />
+                          ))}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -470,6 +458,7 @@ function Index() {
                   shared stages — fork at investment
                 </div>
               </div>
+
 
 
             </section>
