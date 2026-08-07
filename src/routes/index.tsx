@@ -17,7 +17,7 @@ import {
   ChevronRight,
   ChevronLeft,
   Bell,
-  Sparkles,
+  
   GraduationCap,
 } from "lucide-react";
 import { PipelineSection } from "@/components/pipeline";
