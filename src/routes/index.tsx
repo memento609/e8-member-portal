@@ -55,25 +55,51 @@ const nav: { label: string; icon: typeof HomeIcon; active?: boolean; to?: string
   { label: "Explore", icon: Compass },
 ];
 
-// Combined view: one set of stages, two deal types per stage.
-const combinedStages: { name: string; newCount: number | null; followCount: number | null }[] = [
-  { name: "pre-screening", newCount: 12, followCount: null },
-  { name: "screening", newCount: 4, followCount: null },
-  { name: "pitch", newCount: 3, followCount: null },
-  { name: "follow-up", newCount: 2, followCount: null },
-  { name: "diligence", newCount: 2, followCount: 3 },
-  { name: "debrief", newCount: 1, followCount: 2 },
+// Combined view: one set of stages, three deal types per stage.
+type DealType = "new" | "follow" | "d8";
+type Counts = Partial<Record<DealType, number | null>>;
+
+const dealStyles: Record<
+  DealType,
+  { label: string; badge: string; chip: string; bar: string; text: string }
+> = {
+  new: {
+    label: "New",
+    badge: "bg-primary text-primary-foreground",
+    chip: "bg-primary/10 text-primary",
+    bar: "bg-primary",
+    text: "text-primary",
+  },
+  follow: {
+    label: "Follow-on",
+    badge: "border border-accent bg-accent/20 text-accent-foreground",
+    chip: "bg-accent/25 text-accent-foreground",
+    bar: "bg-accent",
+    text: "text-accent-foreground",
+  },
+  d8: {
+    label: "Decarbon8",
+    badge: "border border-chart-3 bg-chart-3/15 text-chart-3",
+    chip: "bg-chart-3/15 text-chart-3",
+    bar: "bg-chart-3",
+    text: "text-chart-3",
+  },
+};
+
+const combinedStages: { name: string; counts: Counts }[] = [
+  { name: "pre-screening", counts: { new: 12 } },
+  { name: "screening", counts: { new: 4, d8: 6 } },
+  { name: "pitch", counts: { new: 3 } },
+  { name: "follow-up", counts: { new: 2 } },
+  { name: "diligence", counts: { new: 2, follow: 3 } },
+  { name: "debrief", counts: { new: 1, follow: 2, d8: 3 } },
 ];
-const combinedForkStages: { name: string; count: number; type: "new" | "follow" }[] = [
-  { name: "direct invest", count: 1, type: "new" },
-  { name: "fund vote", count: 1, type: "new" },
-  { name: "investment ready", count: 1, type: "follow" },
+const combinedForkStages: { name: string; counts: Counts }[] = [
+  { name: "direct invest", counts: { new: 1 } },
+  { name: "fund vote", counts: { new: 1 } },
+  { name: "investment ready", counts: { follow: 1, d8: null } },
 ];
-const decarbonStages = [
-  { name: "screening committee", count: 6 },
-  { name: "sept. presentation", count: 3 },
-  { name: "co-invest / donate", count: null as number | null },
-];
+
 
 type DiligenceStatus = "Team forming" | "Ongoing" | "Review";
 const diligenceCompanies: {
