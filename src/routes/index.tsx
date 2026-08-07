@@ -21,6 +21,12 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { PipelineSection } from "@/components/pipeline";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Route = createFileRoute("/")({
   head: () => ({
