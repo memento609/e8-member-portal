@@ -425,69 +425,9 @@ function Index() {
             </header>
 
             <section className="mb-6 space-y-3">
-              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm md:p-4">
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                  <h2 className="text-sm font-semibold tracking-tight">
-                    Deal pipeline{" "}
-                    <span className="font-normal text-muted-foreground">
-                      (all programs)
-                    </span>
-                  </h2>
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                      {(["new", "follow", "d8"] as DealType[]).map((t) => (
-                        <span key={t} className="flex items-center gap-1">
-                          <span
-                            className={`grid h-3.5 w-3.5 place-items-center rounded-[4px] ${dealStyles[t].badge}`}
-                          >
-                            {dealTypeIcon(t, "h-2.5 w-2.5")}
-                          </span>
-                          {dealStyles[t].label}
-                        </span>
-                      ))}
-                    </div>
-                    <a
-                      href="#"
-                      className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                    >
-                      view full pipeline <ArrowRight className="h-3 w-3" />
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-2 lg:flex-row">
-                  <div className="grid min-w-0 flex-1 grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
-                    {combinedStages.map((s) => (
-                      <SplitStageCard key={s.name} name={s.name} counts={s.counts} />
-                    ))}
-                  </div>
-                  <div className="mx-0.5 hidden border-l border-dashed border-border lg:block" />
-                  <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3 lg:flex lg:shrink-0 lg:flex-col">
-                    {combinedForkStages.map((s) => (
-                      <div
-                        key={s.name}
-                        className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5 lg:min-w-[150px]"
-                      >
-                        <span className="text-[11px] font-medium leading-tight text-muted-foreground">
-                          {s.name}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          {(Object.keys(s.counts) as DealType[]).map((t) => (
-                            <CountChip key={t} type={t} value={s.counts[t]} />
-                          ))}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="mt-2 text-right text-[10px] text-muted-foreground">
-                  shared stages — fork at investment
-                </div>
-              </div>
-
-
-
+              <PipelineSection />
             </section>
+
 
             {/* Three-column organization */}
             <section className="grid grid-cols-1 gap-5 lg:grid-cols-12">
