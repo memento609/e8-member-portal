@@ -825,30 +825,6 @@ function SplitStageCard({ name, counts }: { name: string; counts: Counts }) {
 }
 
 
-function StageCard({
-  name,
-  count,
-  compact,
-  accent,
-}: {
-  name: string;
-  count: number | null;
-  compact?: boolean;
-  accent?: boolean;
-}) {
-  return (
-    <div
-      className={`flex min-w-[88px] flex-1 flex-col justify-between rounded-lg border border-border bg-background ${
-        compact ? "px-2.5 py-1.5" : "px-3 py-2"
-      } ${accent ? "ring-1 ring-accent/40" : ""}`}
-    >
-      <div className="text-[11px] font-medium leading-tight text-muted-foreground">{name}</div>
-      <div className="mt-0.5 text-lg font-semibold leading-tight tracking-tight">
-        {count === null ? "—" : count}
-      </div>
-    </div>
-  );
-}
 
 function VoteBar({
   label,
