@@ -461,12 +461,12 @@ function Index() {
                       <SplitStageCard key={s.name} name={s.name} counts={s.counts} />
                     ))}
                   </div>
-                  <div className="mx-0.5 hidden border-l border-dashed border-border md:block" />
-                  <div className="flex shrink-0 flex-col gap-1.5">
+                  <div className="mx-0.5 hidden border-l border-dashed border-border lg:block" />
+                  <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3 lg:flex lg:shrink-0 lg:flex-col">
                     {combinedForkStages.map((s) => (
                       <div
                         key={s.name}
-                        className="flex min-w-[150px] items-center justify-between gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5"
+                        className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5 lg:min-w-[150px]"
                       >
                         <span className="text-[11px] font-medium leading-tight text-muted-foreground">
                           {s.name}
