@@ -526,10 +526,10 @@ function Index() {
                 <Card>
                   <div className="mb-3 flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                        E8 Fund 2026
+                      <h3 className="font-semibold">Fund Votes</h3>
+                      <div className="mt-0.5 truncate text-sm text-muted-foreground">
+                        Ocean Build
                       </div>
-                      <h3 className="mt-0.5 truncate font-semibold">Ocean Build</h3>
                     </div>
                     <span className="shrink-0 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
                       ● FINAL
