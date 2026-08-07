@@ -21,6 +21,7 @@ import {
   GraduationCap,
   RefreshCw,
   Plus,
+  Leaf,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
