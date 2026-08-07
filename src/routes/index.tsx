@@ -455,8 +455,8 @@ function Index() {
                   </div>
                 </div>
 
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  <div className="flex min-w-0 flex-1 gap-2">
+                <div className="flex flex-col gap-2 lg:flex-row">
+                  <div className="grid min-w-0 flex-1 grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
                     {combinedStages.map((s) => (
                       <SplitStageCard key={s.name} name={s.name} counts={s.counts} />
                     ))}
