@@ -21,6 +21,12 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { PipelineSection } from "@/components/pipeline";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -493,12 +499,20 @@ function Index() {
                         </div>
                         <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
                           {dilCompany.team.length > 0 ? (
-                            <>
-                              {dilCompany.team.map((t) => (
-                                <Chip key={t}>{t}</Chip>
+                            <TooltipProvider delayDuration={100}>
+                              {dilCompany.team.map((t, i) => (
+                                <Tooltip key={t}>
+                                  <TooltipTrigger asChild>
+                                    <span className="cursor-default">
+                                      <Chip>{t}</Chip>
+                                    </span>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    {dilCompany.teamFull.split(", ")[i] ?? t}
+                                  </TooltipContent>
+                                </Tooltip>
                               ))}
-                              <span className="ml-1">{dilCompany.teamFull}</span>
-                            </>
+                            </TooltipProvider>
                           ) : (
                             <span className="italic">{dilCompany.teamFull}</span>
                           )}
