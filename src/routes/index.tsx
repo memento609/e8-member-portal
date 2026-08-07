@@ -88,7 +88,6 @@ const dealStyles: Record<
 };
 
 const combinedStages: { name: string; counts: Counts }[] = [
-  { name: "pre-screening", counts: { new: 12 } },
   { name: "screening", counts: { new: 4, d8: 6 } },
   { name: "pitch", counts: { new: 3 } },
   { name: "follow-up", counts: { new: 2 } },
@@ -456,18 +455,18 @@ function Index() {
                   </div>
                 </div>
 
-                <div className="flex gap-2 overflow-x-auto pb-1">
-                  <div className="flex min-w-0 flex-1 gap-2">
+                <div className="flex flex-col gap-2 lg:flex-row">
+                  <div className="grid min-w-0 flex-1 grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
                     {combinedStages.map((s) => (
                       <SplitStageCard key={s.name} name={s.name} counts={s.counts} />
                     ))}
                   </div>
-                  <div className="mx-0.5 hidden border-l border-dashed border-border md:block" />
-                  <div className="flex shrink-0 flex-col gap-1.5">
+                  <div className="mx-0.5 hidden border-l border-dashed border-border lg:block" />
+                  <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-3 lg:flex lg:shrink-0 lg:flex-col">
                     {combinedForkStages.map((s) => (
                       <div
                         key={s.name}
-                        className="flex min-w-[150px] items-center justify-between gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5"
+                        className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5 lg:min-w-[150px]"
                       >
                         <span className="text-[11px] font-medium leading-tight text-muted-foreground">
                           {s.name}
@@ -803,7 +802,7 @@ function SplitStageCard({ name, counts }: { name: string; counts: Counts }) {
   const types = (Object.keys(counts) as DealType[]).filter((t) => counts[t] !== undefined);
   const total = types.reduce((sum, t) => sum + (counts[t] ?? 0), 0);
   return (
-    <div className="flex min-w-[112px] flex-1 flex-col rounded-lg border border-border bg-background px-2.5 py-2">
+    <div className="flex min-w-0 flex-col rounded-lg border border-border bg-background px-2.5 py-2">
       <div className="text-[11px] font-medium leading-tight text-muted-foreground">{name}</div>
       <div className="mt-1 flex flex-wrap items-center gap-1">
         {types.map((t) => (
