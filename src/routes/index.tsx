@@ -88,7 +88,6 @@ const dealStyles: Record<
 };
 
 const combinedStages: { name: string; counts: Counts }[] = [
-  { name: "pre-screening", counts: { new: 12 } },
   { name: "screening", counts: { new: 4, d8: 6 } },
   { name: "pitch", counts: { new: 3 } },
   { name: "follow-up", counts: { new: 2 } },
