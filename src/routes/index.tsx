@@ -472,22 +472,6 @@ function Index() {
               </div>
 
 
-              <div className="rounded-2xl border border-border bg-card p-3 shadow-sm md:p-4">
-                <div className="mb-2 flex items-center justify-between">
-                  <h2 className="text-sm font-semibold tracking-tight">Decarbon8</h2>
-                  <a
-                    href="#"
-                    className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                  >
-                    view full pipeline <ArrowRight className="h-3 w-3" />
-                  </a>
-                </div>
-                <div className="grid gap-2 sm:grid-cols-3">
-                  {decarbonStages.map((s) => (
-                    <StageCard key={s.name} name={s.name} count={s.count} />
-                  ))}
-                </div>
-              </div>
             </section>
 
             {/* Three-column organization */}
