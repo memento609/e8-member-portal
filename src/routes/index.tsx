@@ -336,15 +336,16 @@ function Index() {
           `}</style>
 
           <div className="mx-auto max-w-[1400px] px-4 py-6 md:px-8">
-            <header className="mb-6 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
-              <div className="min-w-0">
+            <header className="mb-6 grid grid-cols-1 items-stretch gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
+              <div className="flex min-w-0 flex-col">
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">
                   Home
                 </div>
                 <h1 className="mt-1 truncate text-2xl font-semibold tracking-tight sm:text-3xl">
                   Good afternoon, Nami.
                 </h1>
-                <div className="mt-3 flex items-start gap-3 rounded-2xl border border-accent/40 bg-accent/15 p-3 shadow-sm md:p-4">
+                <div className="mt-3 flex flex-1 items-start gap-3 rounded-2xl border border-accent/40 bg-accent/15 p-3 shadow-sm md:p-4">
+
                   <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/40 text-accent-foreground">
                     <Bell className="h-3.5 w-3.5" />
                   </span>
@@ -366,7 +367,7 @@ function Index() {
 
 
               {/* Member Profile — top-right corner */}
-              <div className="w-full rounded-2xl border border-border bg-card p-4 shadow-sm md:w-[360px]">
+              <div className="flex w-full flex-col justify-center self-end rounded-2xl border border-border bg-card p-4 shadow-sm md:w-[300px]">
                 <div className="flex items-center gap-3">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-muted text-sm font-semibold">
                     NT
