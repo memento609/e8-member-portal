@@ -367,7 +367,7 @@ function Index() {
 
 
               {/* Member Profile — top-right corner */}
-              <div className="w-full rounded-2xl border border-border bg-card p-4 shadow-sm md:w-[360px]">
+              <div className="flex w-full flex-col justify-center self-end rounded-2xl border border-border bg-card p-4 shadow-sm md:w-[300px]">
                 <div className="flex items-center gap-3">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-muted text-sm font-semibold">
                     NT
