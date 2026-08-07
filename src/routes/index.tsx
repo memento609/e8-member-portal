@@ -72,6 +72,20 @@ const followOnStages = [
   { name: "debrief", count: 2 },
   { name: "investment ready", count: 1 },
 ];
+// Combined view: one set of stages, two deal types per stage.
+const combinedStages: { name: string; newCount: number | null; followCount: number | null }[] = [
+  { name: "pre-screening", newCount: 12, followCount: null },
+  { name: "screening", newCount: 4, followCount: null },
+  { name: "pitch", newCount: 3, followCount: null },
+  { name: "follow-up", newCount: 2, followCount: null },
+  { name: "diligence", newCount: 2, followCount: 3 },
+  { name: "debrief", newCount: 1, followCount: 2 },
+];
+const combinedForkStages: { name: string; count: number; type: "new" | "follow" }[] = [
+  { name: "direct invest", count: 1, type: "new" },
+  { name: "fund vote", count: 1, type: "new" },
+  { name: "investment ready", count: 1, type: "follow" },
+];
 const decarbonStages = [
   { name: "screening committee", count: 6 },
   { name: "sept. presentation", count: 3 },
