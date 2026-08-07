@@ -779,39 +779,50 @@ function StatusBadge({ status }: { status: DiligenceStatus }) {
 }
 
 
-function SplitStageCard({
-  name,
-  newCount,
-  followCount,
-}: {
-  name: string;
-  newCount: number | null;
-  followCount: number | null;
-}) {
-  const total = (newCount ?? 0) + (followCount ?? 0);
-  const newPct = total ? ((newCount ?? 0) / total) * 100 : 100;
+function dealTypeIcon(type: DealType, cls: string) {
+  if (type === "new") return <Plus className={cls} />;
+  if (type === "follow") return <RefreshCw className={cls} />;
+  return <Leaf className={cls} />;
+}
+
+function CountChip({ type, value }: { type: DealType; value: number | null | undefined }) {
+  const s = dealStyles[type];
   return (
-    <div className="flex min-w-[104px] flex-1 flex-col rounded-lg border border-border bg-background px-2.5 py-2">
+    <span
+      className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-sm font-semibold leading-none ${s.chip}`}
+      title={s.label}
+    >
+      {dealTypeIcon(type, "h-3 w-3")}
+      {value === null || value === undefined ? "—" : value}
+    </span>
+  );
+}
+
+function SplitStageCard({ name, counts }: { name: string; counts: Counts }) {
+  const types = (Object.keys(counts) as DealType[]).filter((t) => counts[t] !== undefined);
+  const total = types.reduce((sum, t) => sum + (counts[t] ?? 0), 0);
+  return (
+    <div className="flex min-w-[112px] flex-1 flex-col rounded-lg border border-border bg-background px-2.5 py-2">
       <div className="text-[11px] font-medium leading-tight text-muted-foreground">{name}</div>
-      <div className="mt-1 flex items-end gap-2">
-        <span className="flex items-center gap-1 text-lg font-semibold leading-none tracking-tight">
-          <Plus className="h-3 w-3 text-primary" />
-          {newCount ?? 0}
-        </span>
-        {followCount ? (
-          <span className="flex items-center gap-1 rounded-md bg-accent/15 px-1.5 py-0.5 text-sm font-semibold leading-none text-accent">
-            <RefreshCw className="h-3 w-3" />
-            {followCount}
-          </span>
-        ) : null}
+      <div className="mt-1 flex flex-wrap items-center gap-1">
+        {types.map((t) => (
+          <CountChip key={t} type={t} value={counts[t]} />
+        ))}
       </div>
-      <div className="mt-1.5 flex h-1 overflow-hidden rounded-full bg-muted">
-        <div className="h-full bg-primary" style={{ width: `${newPct}%` }} />
-        <div className="h-full bg-accent" style={{ width: `${100 - newPct}%` }} />
+      <div className="mt-1.5 flex h-1 gap-px overflow-hidden rounded-full bg-muted">
+        {total > 0 &&
+          types.map((t) => (
+            <div
+              key={t}
+              className={`h-full ${dealStyles[t].bar}`}
+              style={{ width: `${((counts[t] ?? 0) / total) * 100}%` }}
+            />
+          ))}
       </div>
     </div>
   );
 }
+
 
 function StageCard({
   name,
