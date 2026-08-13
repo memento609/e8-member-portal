@@ -54,9 +54,24 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const nav: { label: string; icon: typeof HomeIcon; active?: boolean; to?: string }[] = [
+type NavItem = {
+  label: string;
+  icon: typeof HomeIcon;
+  active?: boolean;
+  to?: string;
+  children?: { label: string; to?: string }[];
+};
+
+const nav: NavItem[] = [
   { label: "Home", icon: HomeIcon, active: true, to: "/" },
-  { label: "Pipeline", icon: GitBranch },
+  {
+    label: "Pipeline",
+    icon: GitBranch,
+    children: [
+      { label: "Decarbon8" },
+      { label: "In Diligence" },
+    ],
+  },
   { label: "Calendar", icon: CalendarIcon },
   { label: "Recordings", icon: Video },
   { label: "E8 Fund", icon: Coins },
