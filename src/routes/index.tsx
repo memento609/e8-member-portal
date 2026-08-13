@@ -306,28 +306,19 @@ function Index() {
 
           {navOpen && (
             <nav className="grid gap-0.5 border-t border-sidebar-border px-4 py-2 lg:hidden">
-              {nav.map((item) => {
-                const className = `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                  item.active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent"
-                }`;
-                const inner = (
-                  <>
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </>
-                );
-                return item.to ? (
-                  <Link key={item.label} to={item.to} className={className} onClick={() => setNavOpen(false)}>
-                    {inner}
-                  </Link>
-                ) : (
-                  <a key={item.label} href="#" className={className} onClick={() => setNavOpen(false)}>
-                    {inner}
-                  </a>
-                );
-              })}
+              {nav.map((item) => (
+                <NavItemLink
+                  key={item.label}
+                  item={item}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                    item.active
+                      ? "bg-primary text-primary-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent"
+                  }`}
+                  iconClassName="h-4 w-4"
+                  onClick={() => setNavOpen(false)}
+                />
+              ))}
             </nav>
           )}
         </header>
