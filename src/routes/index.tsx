@@ -17,7 +17,7 @@ import {
   ChevronRight,
   ChevronLeft,
   Bell,
-  
+  ChevronDown,
   GraduationCap,
 } from "lucide-react";
 import { PipelineSection } from "@/components/pipeline";
@@ -27,6 +27,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,9 +54,24 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const nav: { label: string; icon: typeof HomeIcon; active?: boolean; to?: string }[] = [
+type NavItem = {
+  label: string;
+  icon: typeof HomeIcon;
+  active?: boolean;
+  to?: string;
+  children?: { label: string; to?: string }[];
+};
+
+const nav: NavItem[] = [
   { label: "Home", icon: HomeIcon, active: true, to: "/" },
-  { label: "Pipeline", icon: GitBranch },
+  {
+    label: "Pipeline",
+    icon: GitBranch,
+    children: [
+      { label: "Decarbon8" },
+      { label: "In Diligence" },
+    ],
+  },
   { label: "Calendar", icon: CalendarIcon },
   { label: "Recordings", icon: Video },
   { label: "E8 Fund", icon: Coins },
@@ -250,28 +271,18 @@ function Index() {
             </div>
 
             <nav className="hidden min-w-0 flex-1 items-center gap-0.5 lg:flex">
-              {nav.map((item) => {
-                const className = `flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-[13px] transition-colors ${
-                  item.active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent"
-                }`;
-                const inner = (
-                  <>
-                    <item.icon className="h-3.5 w-3.5" />
-                    <span>{item.label}</span>
-                  </>
-                );
-                return item.to ? (
-                  <Link key={item.label} to={item.to} className={className}>
-                    {inner}
-                  </Link>
-                ) : (
-                  <a key={item.label} href="#" className={className}>
-                    {inner}
-                  </a>
-                );
-              })}
+              {nav.map((item) => (
+                <NavItemLink
+                  key={item.label}
+                  item={item}
+                  className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-[13px] transition-colors ${
+                    item.active
+                      ? "bg-primary text-primary-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent"
+                  }`}
+                  iconClassName="h-3.5 w-3.5"
+                />
+              ))}
             </nav>
 
             <div className="ml-auto flex items-center gap-2">
@@ -295,28 +306,19 @@ function Index() {
 
           {navOpen && (
             <nav className="grid gap-0.5 border-t border-sidebar-border px-4 py-2 lg:hidden">
-              {nav.map((item) => {
-                const className = `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                  item.active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent"
-                }`;
-                const inner = (
-                  <>
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </>
-                );
-                return item.to ? (
-                  <Link key={item.label} to={item.to} className={className} onClick={() => setNavOpen(false)}>
-                    {inner}
-                  </Link>
-                ) : (
-                  <a key={item.label} href="#" className={className} onClick={() => setNavOpen(false)}>
-                    {inner}
-                  </a>
-                );
-              })}
+              {nav.map((item) => (
+                <NavItemLink
+                  key={item.label}
+                  item={item}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                    item.active
+                      ? "bg-primary text-primary-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent"
+                  }`}
+                  iconClassName="h-4 w-4"
+                  onClick={() => setNavOpen(false)}
+                />
+              ))}
             </nav>
           )}
         </header>
@@ -358,28 +360,18 @@ function Index() {
             </div>
 
             <nav className="mt-4 flex-1 space-y-0.5 px-3">
-              {nav.map((item) => {
-                const className = `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                  item.active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent"
-                }`;
-                const inner = (
-                  <>
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </>
-                );
-                return item.to ? (
-                  <Link key={item.label} to={item.to} className={className}>
-                    {inner}
-                  </Link>
-                ) : (
-                  <a key={item.label} href="#" className={className}>
-                    {inner}
-                  </a>
-                );
-              })}
+              {nav.map((item) => (
+                <NavItemLink
+                  key={item.label}
+                  item={item}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                    item.active
+                      ? "bg-primary text-primary-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent"
+                  }`}
+                  iconClassName="h-4 w-4"
+                />
+              ))}
             </nav>
 
             <div className="border-t border-sidebar-border p-3">
@@ -771,6 +763,63 @@ function Index() {
         </main>
       </div>
     </div>
+  );
+}
+
+function NavItemLink({
+  item,
+  className,
+  iconClassName,
+  onClick,
+}: {
+  item: NavItem;
+  className: string;
+  iconClassName: string;
+  onClick?: () => void;
+}) {
+  const inner = (
+    <>
+      <item.icon className={iconClassName} />
+      <span>{item.label}</span>
+    </>
+  );
+
+  if (item.children) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button type="button" className={className}>
+            {inner}
+            <ChevronDown className="h-3 w-3 opacity-60" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          {item.children.map((child) => (
+            <DropdownMenuItem key={child.label} asChild>
+              {child.to && !child.to.startsWith("#") ? (
+                <Link to={child.to} onClick={onClick}>
+                  {child.label}
+                </Link>
+              ) : (
+                <a href={child.to || "#"} onClick={onClick}>
+                  {child.label}
+                </a>
+              )}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  return item.to ? (
+    <Link to={item.to} className={className} onClick={onClick}>
+      {inner}
+    </Link>
+  ) : (
+    <a href="#" className={className} onClick={onClick}>
+      {inner}
+    </a>
   );
 }
 
