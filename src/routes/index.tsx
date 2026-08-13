@@ -77,7 +77,6 @@ const nav: NavItem[] = [
   { label: "E8 Fund", icon: Coins },
   { label: "Portfolio News", icon: Newspaper },
   { label: "Education", icon: GraduationCap, to: "/education" },
-  { label: "Member Directory", icon: Users },
   { label: "Explore", icon: Compass },
 ];
 
