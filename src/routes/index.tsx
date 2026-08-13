@@ -199,6 +199,21 @@ function Index() {
             E8 site style
           </button>
         </div>
+        <span className="ml-3 text-[11px] uppercase tracking-widest text-muted-foreground">Nav</span>
+        <div className="inline-flex overflow-hidden rounded-full border border-border text-xs">
+          {(["side", "top"] as const).map((l) => (
+            <button
+              key={l}
+              onClick={() => {
+                setNavLayout(l);
+                setNavOpen(false);
+              }}
+              className={`px-3 py-1 transition-colors ${navLayout === l ? "bg-primary text-primary-foreground" : "bg-transparent text-muted-foreground hover:bg-muted"}`}
+            >
+              {l === "side" ? "Left nav" : "Top nav"}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Mobile top bar (side-nav layout) */}
