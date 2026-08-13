@@ -172,6 +172,7 @@ const calendar = [
 
 function Index() {
   const [navOpen, setNavOpen] = useState(false);
+  const [navLayout, setNavLayout] = useState<"side" | "top">("side");
   const [dilIdx, setDilIdx] = useState(0);
   const [themeE8, setThemeE8] = useState(false);
   const dilCount = diligenceCompanies.length;
@@ -198,9 +199,25 @@ function Index() {
             E8 site style
           </button>
         </div>
+        <span className="ml-3 text-[11px] uppercase tracking-widest text-muted-foreground">Nav</span>
+        <div className="inline-flex overflow-hidden rounded-full border border-border text-xs">
+          {(["side", "top"] as const).map((l) => (
+            <button
+              key={l}
+              onClick={() => {
+                setNavLayout(l);
+                setNavOpen(false);
+              }}
+              className={`px-3 py-1 transition-colors ${navLayout === l ? "bg-primary text-primary-foreground" : "bg-transparent text-muted-foreground hover:bg-muted"}`}
+            >
+              {l === "side" ? "Left nav" : "Top nav"}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Mobile top bar */}
+      {/* Mobile top bar (side-nav layout) */}
+      {navLayout === "side" && (
       <div className="flex items-center justify-between border-b border-border bg-sidebar px-4 py-3 md:hidden">
         <div className="flex items-center gap-2">
           <div className="grid h-8 w-8 place-items-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
@@ -216,9 +233,98 @@ function Index() {
           <Menu className="h-5 w-5" />
         </button>
       </div>
+      )}
+
+      {/* Top navigation layout */}
+      {navLayout === "top" && (
+        <header className="sticky top-[41px] z-40 border-b border-sidebar-border bg-sidebar">
+          <div className="mx-auto flex max-w-[1400px] items-center gap-4 px-4 py-2.5 md:px-8">
+            <div className="flex shrink-0 items-center gap-2">
+              <div className="grid h-8 w-8 place-items-center rounded-full bg-primary text-primary-foreground text-xs font-bold">
+                E8
+              </div>
+              <div className="leading-tight">
+                <div className="text-sm font-semibold tracking-tight">E8 Angels</div>
+                <div className="text-[10px] text-muted-foreground">Member portal</div>
+              </div>
+            </div>
+
+            <nav className="hidden min-w-0 flex-1 items-center gap-0.5 lg:flex">
+              {nav.map((item) => {
+                const className = `flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-[13px] transition-colors ${
+                  item.active
+                    ? "bg-primary text-primary-foreground"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent"
+                }`;
+                const inner = (
+                  <>
+                    <item.icon className="h-3.5 w-3.5" />
+                    <span>{item.label}</span>
+                  </>
+                );
+                return item.to ? (
+                  <Link key={item.label} to={item.to} className={className}>
+                    {inner}
+                  </Link>
+                ) : (
+                  <a key={item.label} href="#" className={className}>
+                    {inner}
+                  </a>
+                );
+              })}
+            </nav>
+
+            <div className="ml-auto flex items-center gap-2">
+              <div className="hidden items-center gap-2 rounded-lg border border-border bg-background px-3 py-1.5 text-xs text-muted-foreground sm:flex">
+                <Search className="h-3.5 w-3.5" />
+                <span>Search…</span>
+              </div>
+              <Bell className="h-4 w-4 text-muted-foreground" />
+              <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-muted text-[11px] font-semibold">
+                NT
+              </div>
+              <button
+                onClick={() => setNavOpen((o) => !o)}
+                aria-label="Toggle navigation"
+                className="rounded-md p-1.5 hover:bg-muted lg:hidden"
+              >
+                {navOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+            </div>
+          </div>
+
+          {navOpen && (
+            <nav className="grid gap-0.5 border-t border-sidebar-border px-4 py-2 lg:hidden">
+              {nav.map((item) => {
+                const className = `flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
+                  item.active
+                    ? "bg-primary text-primary-foreground"
+                    : "text-sidebar-foreground hover:bg-sidebar-accent"
+                }`;
+                const inner = (
+                  <>
+                    <item.icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </>
+                );
+                return item.to ? (
+                  <Link key={item.label} to={item.to} className={className} onClick={() => setNavOpen(false)}>
+                    {inner}
+                  </Link>
+                ) : (
+                  <a key={item.label} href="#" className={className} onClick={() => setNavOpen(false)}>
+                    {inner}
+                  </a>
+                );
+              })}
+            </nav>
+          )}
+        </header>
+      )}
 
       <div className="flex">
         {/* Sidebar */}
+        {navLayout === "side" && (
         <aside
           className={`${
             navOpen ? "translate-x-0" : "-translate-x-full"
@@ -290,6 +396,7 @@ function Index() {
             </div>
           </div>
         </aside>
+        )}
 
         {navOpen && (
           <button
