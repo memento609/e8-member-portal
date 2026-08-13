@@ -172,6 +172,7 @@ const calendar = [
 
 function Index() {
   const [navOpen, setNavOpen] = useState(false);
+  const [navLayout, setNavLayout] = useState<"side" | "top">("side");
   const [dilIdx, setDilIdx] = useState(0);
   const [themeE8, setThemeE8] = useState(false);
   const dilCount = diligenceCompanies.length;
