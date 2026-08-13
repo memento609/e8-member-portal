@@ -768,6 +768,83 @@ function Index() {
   );
 }
 
+function SidebarNavItem({
+  item,
+  expanded,
+  onToggle,
+}: {
+  item: NavItem;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const baseClass =
+    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors w-full";
+  const activeClass = item.active
+    ? "bg-primary text-primary-foreground"
+    : "text-sidebar-foreground hover:bg-sidebar-accent";
+
+  const content = (
+    <>
+      <item.icon className="h-4 w-4 shrink-0" />
+      <span className="flex-1 text-left">{item.label}</span>
+    </>
+  );
+
+  return (
+    <div className="space-y-0.5">
+      {item.children ? (
+        <>
+          <button
+            type="button"
+            onClick={onToggle}
+            className={`${baseClass} ${activeClass}`}
+          >
+            {content}
+            <ChevronDown
+              className={`h-4 w-4 shrink-0 opacity-60 transition-transform ${
+                expanded ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+          {expanded && (
+            <div className="ml-4 border-l border-sidebar-border pl-3 space-y-0.5">
+              {item.children.map((child) => (
+                <ChildNavLink key={child.label} child={child} />
+              ))}
+            </div>
+          )}
+        </>
+      ) : item.to ? (
+        <Link to={item.to} className={`${baseClass} ${activeClass}`}>
+          {content}
+        </Link>
+      ) : (
+        <a href="#" className={`${baseClass} ${activeClass}`}>
+          {content}
+        </a>
+      )}
+    </div>
+  );
+}
+
+function ChildNavLink({
+  child,
+}: {
+  child: { label: string; to?: string };
+}) {
+  const className =
+    "block rounded-md px-3 py-1.5 text-sm text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground";
+  return child.to && !child.to.startsWith("#") ? (
+    <Link to={child.to} className={className}>
+      {child.label}
+    </Link>
+  ) : (
+    <a href={child.to || "#"} className={className}>
+      {child.label}
+    </a>
+  );
+}
+
 function NavItemLink({
   item,
   className,
