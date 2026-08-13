@@ -193,12 +193,19 @@ const calendar = [
 function Index() {
   const [navOpen, setNavOpen] = useState(false);
   const [navLayout, setNavLayout] = useState<"side" | "top">("side");
+  const [expandedNav, setExpandedNav] = useState<Record<string, boolean>>({
+    Pipeline: true,
+  });
   const [dilIdx, setDilIdx] = useState(0);
   const [themeE8, setThemeE8] = useState(false);
   const dilCount = diligenceCompanies.length;
   const dilCompany = diligenceCompanies[dilIdx];
   const nextDil = () => setDilIdx((i) => (i + 1) % dilCount);
   const prevDil = () => setDilIdx((i) => (i - 1 + dilCount) % dilCount);
+
+  const toggleNavGroup = (label: string) => {
+    setExpandedNav((prev) => ({ ...prev, [label]: !prev[label] }));
+  };
 
   return (
     <div className={`min-h-screen bg-background text-foreground ${themeE8 ? "theme-e8site" : ""}`}>
@@ -360,15 +367,11 @@ function Index() {
 
             <nav className="mt-4 flex-1 space-y-0.5 px-3">
               {nav.map((item) => (
-                <NavItemLink
+                <SidebarNavItem
                   key={item.label}
                   item={item}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                    item.active
-                      ? "bg-primary text-primary-foreground"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent"
-                  }`}
-                  iconClassName="h-4 w-4"
+                  expanded={!!expandedNav[item.label]}
+                  onToggle={() => toggleNavGroup(item.label)}
                 />
               ))}
             </nav>
@@ -762,6 +765,83 @@ function Index() {
         </main>
       </div>
     </div>
+  );
+}
+
+function SidebarNavItem({
+  item,
+  expanded,
+  onToggle,
+}: {
+  item: NavItem;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const baseClass =
+    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors w-full";
+  const activeClass = item.active
+    ? "bg-primary text-primary-foreground"
+    : "text-sidebar-foreground hover:bg-sidebar-accent";
+
+  const content = (
+    <>
+      <item.icon className="h-4 w-4 shrink-0" />
+      <span className="flex-1 text-left">{item.label}</span>
+    </>
+  );
+
+  return (
+    <div className="space-y-0.5">
+      {item.children ? (
+        <>
+          <button
+            type="button"
+            onClick={onToggle}
+            className={`${baseClass} ${activeClass}`}
+          >
+            {content}
+            <ChevronDown
+              className={`h-4 w-4 shrink-0 opacity-60 transition-transform ${
+                expanded ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+          {expanded && (
+            <div className="ml-4 border-l border-sidebar-border pl-3 space-y-0.5">
+              {item.children.map((child) => (
+                <ChildNavLink key={child.label} child={child} />
+              ))}
+            </div>
+          )}
+        </>
+      ) : item.to ? (
+        <Link to={item.to} className={`${baseClass} ${activeClass}`}>
+          {content}
+        </Link>
+      ) : (
+        <a href="#" className={`${baseClass} ${activeClass}`}>
+          {content}
+        </a>
+      )}
+    </div>
+  );
+}
+
+function ChildNavLink({
+  child,
+}: {
+  child: { label: string; to?: string };
+}) {
+  const className =
+    "block rounded-md px-3 py-1.5 text-sm text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground";
+  return child.to && !child.to.startsWith("#") ? (
+    <Link to={child.to} className={className}>
+      {child.label}
+    </Link>
+  ) : (
+    <a href={child.to || "#"} className={className}>
+      {child.label}
+    </a>
   );
 }
 
