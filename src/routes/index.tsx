@@ -193,12 +193,19 @@ const calendar = [
 function Index() {
   const [navOpen, setNavOpen] = useState(false);
   const [navLayout, setNavLayout] = useState<"side" | "top">("side");
+  const [expandedNav, setExpandedNav] = useState<Record<string, boolean>>({
+    Pipeline: true,
+  });
   const [dilIdx, setDilIdx] = useState(0);
   const [themeE8, setThemeE8] = useState(false);
   const dilCount = diligenceCompanies.length;
   const dilCompany = diligenceCompanies[dilIdx];
   const nextDil = () => setDilIdx((i) => (i + 1) % dilCount);
   const prevDil = () => setDilIdx((i) => (i - 1 + dilCount) % dilCount);
+
+  const toggleNavGroup = (label: string) => {
+    setExpandedNav((prev) => ({ ...prev, [label]: !prev[label] }));
+  };
 
   return (
     <div className={`min-h-screen bg-background text-foreground ${themeE8 ? "theme-e8site" : ""}`}>
