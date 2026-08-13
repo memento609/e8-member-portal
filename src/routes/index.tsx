@@ -367,15 +367,11 @@ function Index() {
 
             <nav className="mt-4 flex-1 space-y-0.5 px-3">
               {nav.map((item) => (
-                <NavItemLink
+                <SidebarNavItem
                   key={item.label}
                   item={item}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                    item.active
-                      ? "bg-primary text-primary-foreground"
-                      : "text-sidebar-foreground hover:bg-sidebar-accent"
-                  }`}
-                  iconClassName="h-4 w-4"
+                  expanded={!!expandedNav[item.label]}
+                  onToggle={() => toggleNavGroup(item.label)}
                 />
               ))}
             </nav>
