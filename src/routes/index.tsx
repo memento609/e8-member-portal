@@ -17,7 +17,7 @@ import {
   ChevronRight,
   ChevronLeft,
   Bell,
-  
+  ChevronDown,
   GraduationCap,
 } from "lucide-react";
 import { PipelineSection } from "@/components/pipeline";
@@ -27,6 +27,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/")({
   head: () => ({
