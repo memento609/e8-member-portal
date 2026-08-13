@@ -271,28 +271,18 @@ function Index() {
             </div>
 
             <nav className="hidden min-w-0 flex-1 items-center gap-0.5 lg:flex">
-              {nav.map((item) => {
-                const className = `flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-[13px] transition-colors ${
-                  item.active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent"
-                }`;
-                const inner = (
-                  <>
-                    <item.icon className="h-3.5 w-3.5" />
-                    <span>{item.label}</span>
-                  </>
-                );
-                return item.to ? (
-                  <Link key={item.label} to={item.to} className={className}>
-                    {inner}
-                  </Link>
-                ) : (
-                  <a key={item.label} href="#" className={className}>
-                    {inner}
-                  </a>
-                );
-              })}
+              {nav.map((item) => (
+                <NavItemLink
+                  key={item.label}
+                  item={item}
+                  className={`flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-[13px] transition-colors ${
+                    item.active
+                      ? "bg-primary text-primary-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent"
+                  }`}
+                  iconClassName="h-3.5 w-3.5"
+                />
+              ))}
             </nav>
 
             <div className="ml-auto flex items-center gap-2">
