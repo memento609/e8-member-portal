@@ -766,6 +766,63 @@ function Index() {
   );
 }
 
+function NavItemLink({
+  item,
+  className,
+  iconClassName,
+  onClick,
+}: {
+  item: NavItem;
+  className: string;
+  iconClassName: string;
+  onClick?: () => void;
+}) {
+  const inner = (
+    <>
+      <item.icon className={iconClassName} />
+      <span>{item.label}</span>
+    </>
+  );
+
+  if (item.children) {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button type="button" className={className}>
+            {inner}
+            <ChevronDown className="h-3 w-3 opacity-60" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          {item.children.map((child) => (
+            <DropdownMenuItem key={child.label} asChild>
+              {child.to && !child.to.startsWith("#") ? (
+                <Link to={child.to} onClick={onClick}>
+                  {child.label}
+                </Link>
+              ) : (
+                <a href={child.to || "#"} onClick={onClick}>
+                  {child.label}
+                </a>
+              )}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
+
+  return item.to ? (
+    <Link to={item.to} className={className} onClick={onClick}>
+      {inner}
+    </Link>
+  ) : (
+    <a href="#" className={className} onClick={onClick}>
+      {inner}
+    </a>
+  );
+}
+
 function Card({ children }: { children: React.ReactNode }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
