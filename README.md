@@ -1,6 +1,6 @@
 # Pipeline Portal
 
-I want to create some mockups for a portal redesign for a membership-based angel investing community.  I've attached a screenshot from the existing portal.  The first priority is to incorporate a swimlane-like display of deals in the pipeline; a wireframe for this idea is also attached.  This should be placed as the main component on the landing page.  A couple of other things that we want to change from the existing screen are:
+Create mockups for a portal redesign of a membership-based angel-investing community.  The first priority is to incorporate a swimlane-like display of deals in the pipeline; a wireframe for this idea is also attached.  This should be placed as the main component on the landing page.  A couple of other things that we want to change from the existing screen are:
 
 This project was built with [Lovable](https://lovable.dev).
 
