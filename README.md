@@ -1,14 +1,18 @@
-# Welcome to your Lovable project
+# Pipeline Portal
+
+I want to create some mockups for a portal redesign for a membership-based angel investing community.  I've attached a screenshot from the existing portal.  The first priority is to incorporate a swimlane-like display of deals in the pipeline; a wireframe for this idea is also attached.  This should be placed as the main component on the landing page.  A couple of other things that we want to change from the existing screen are:
 
 This project was built with [Lovable](https://lovable.dev).
 
+**Live app**: https://e8-member-portal.lovable.app
+
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/51faee09-537e-41a0-9892-f13b12992952).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +24,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
